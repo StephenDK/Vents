@@ -24,7 +24,11 @@ class EventForm extends Component {
         evt.preventDefault();
         // console.log(this.refs.title.value);
         // console.log(this.state);
-        this.props.createEvent(this.state);
+        if (this.state.id) {
+            this.props.updateEvent(this.state)
+        } else {
+            this.props.createEvent(this.state);
+        }
     }
 
 

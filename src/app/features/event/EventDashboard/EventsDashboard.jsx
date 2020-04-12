@@ -66,7 +66,7 @@ class EventsDashboard extends Component {
         selectedEvent: null
     };
 
-
+    // Handle Opening the Form
     handleCreateFormOpen = () => {
       this.setState({
         isOpen: true,
@@ -74,6 +74,7 @@ class EventsDashboard extends Component {
       })
     };
 
+    // Handle Canceling the Form
     handleFormCancel = () => {
       this.setState({
         isOpen: false
@@ -86,6 +87,7 @@ class EventsDashboard extends Component {
     //     }));
     // };
 
+    // Handle Creating the event
     handleCreateEvent = (newEvent) => {
       newEvent.id = cuid();
       newEvent.hostPhotoURL = '/assets/user.png';
@@ -95,12 +97,32 @@ class EventsDashboard extends Component {
       }));
     };
 
+    // Handle selecting the event
     handleSelectEvent = (event) => {
       this.setState({
         selectedEvent: event,
         isOpen: true
       })
     }
+
+    // Handle Updating the event
+    handleUpdateEvent = (updatedEvent) => {
+      this.setState(({events}) => ({
+        events: events.map(event => {
+          if (event.id === updatedEvent.id) {
+            return {...updatedEvent}
+          } else {
+            return event
+          }
+        }),
+        isOpen: false,
+        selectedEvent: null
+      }));
+    };
+
+
+    handle
+
 
     render() {
         const { events, isOpen, selectedEvent } = this.state;
@@ -118,6 +140,7 @@ class EventsDashboard extends Component {
                     {isOpen && (
                       <EventForm 
                         key={selectedEvent ? selectedEvent.id : 0}
+                        updateEvent={this.handleUpdateEvent}
                         selectedEvent={selectedEvent}
                         createEvent={this.handleCreateEvent} 
                         cancelFormOpen={this.handleFormCancel}
