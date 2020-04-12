@@ -14,7 +14,8 @@ class EventForm extends Component {
     handleFormSubmit = (event) => {
         event.preventDefault();
         // console.log(this.refs.title.value);
-        console.log(this.state);
+        // console.log(this.state);
+        this.props.createEvent(this.state);
     }
 
 
