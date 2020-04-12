@@ -11,17 +11,17 @@ class EventForm extends Component {
         hostedBy: ''
     }
     
-    handleFormSubmit = (event) => {
-        event.preventDefault();
+    handleFormSubmit = (evt) => {
+        evt.preventDefault();
         // console.log(this.refs.title.value);
         // console.log(this.state);
         this.props.createEvent(this.state);
     }
 
 
-    handleTitleChange = (event) => {
+    handleTitleChange = (evt) => {
         this.setState({
-            [event.target.name]: event.target.value
+            [evt.target.name]: evt.target.value
         })
     }
     
