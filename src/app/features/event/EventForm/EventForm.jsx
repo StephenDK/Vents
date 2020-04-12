@@ -9,6 +9,15 @@ class EventForm extends Component {
         city: '',
         venue: '',
         hostedBy: ''
+    };
+
+    // Lifecycle Methods
+    componentDidMount() {
+        if (this.props.selectEvent !== null) {
+            this.setState({
+                ...this.props.selectedEvent
+            })
+        }
     }
     
     handleFormSubmit = (evt) => {
