@@ -1,9 +1,11 @@
 import React from 'react'
 
-export const SettingsDashboard = () => {
+const SettingsDashboard = () => {
     return (
         <div>
             
         </div>
     )
 }
+
+export default SettingsDashboard;
