@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 // 2.1 Bring in HOC connect to connect component to store
 import  { connect } from 'react-redux';
+import { incrementCounter, decrementCounter } from './testActions';
+import { Button } from 'semantic-ui-react';
 
 
 // 2.3 create function to map store state to component props
@@ -9,20 +11,34 @@ const mapStateToProps = (state) => ({
     data: state.data
 })
 
+//3.6 this is where you create mapDispatchToProps objects
+// with the action creators
+const mapDispatchToProps = {
+    incrementCounter,
+    decrementCounter
+};
+// 3.7 now pass the mapDispatchToProps to the connect function below
+// by adding it to connect the actions become available as props
+
 class TestComponent extends Component {
     render() {
+        const { data, incrementCounter, decrementCounter } = this.props; // 3.8 destruct props
         return(
             <div>
                 <h1>Test Component</h1>
-                {/* 2.5 access the state date using props */}
-                <h3>The answer is {this.props.data}</h3>
+                {/* 2.5 access the state date using props 
+                    check testConstants for 3.0
+                */}
+                <h3>The answer is {data}</h3>
+                <Button onClick={incrementCounter} positive content='Increment'></Button>
+                <Button onClick={decrementCounter} negative content='Decrement'></Button>
             </div>
         )
     }
 };
 
 // 2.2 wrap the component in the connect component
-export default connect(mapStateToProps)(TestComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(TestComponent);
 // 2.4 pass mapStateToProps to connect function
 
 
