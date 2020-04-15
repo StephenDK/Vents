@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './app/layout/App';
-import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom';
-
-
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./app/layout/App";
+import * as serviceWorker from "./serviceWorker";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { configureStore } from './app/store/configureStore';
 
 /* 
 HOT MODULE REPLACEMENT
@@ -14,22 +14,32 @@ when changes are made in the project which it does
 automatically. This can make for a nicer development
 experience 
 
-
 */
-const rootEl = document.getElementById('root');
+
+// 1.11 pass to the Provider our store instance
+const store = configureStore();
+
+// 1.12 logginf the store using getState()
+console.log(store.getState());
+
+const rootEl = document.getElementById("root");
 
 let render = () => {
-    ReactDOM.render(
-        <BrowserRouter>
-            <App />,
-        </BrowserRouter>,
-        rootEl);
-}
+    //1.10 import provider and wrap application in <Provider>
+  ReactDOM.render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />,
+      </BrowserRouter>
+    </Provider>,
+    rootEl
+  );
+};
 
 if (module.hot) {
-    module.hot.accept('./app/layout/App.jsx', () => {
-        setTimeout(render);
-    })
+  module.hot.accept("./app/layout/App.jsx", () => {
+    setTimeout(render);
+  });
 }
 
 render();

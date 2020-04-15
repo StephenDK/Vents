@@ -11,3 +11,7 @@ class TestComponent extends Component {
 };
 
 export default TestComponent;
+
+// Redux setup steps
+// 1. Setup the redux store inside app
+// View store folder > configureStore.js file
