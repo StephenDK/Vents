@@ -2,16 +2,25 @@ import React, { Component } from 'react'
 import { Grid, Button } from 'semantic-ui-react' 
 // CH 8 Step 3: Connect Component to store
 import { connect } from 'react-redux';
+// CH 8 Step 4 Import event Actions and Configure
+import {createEvent, updateEvent, deleteEvent} from '../eventActions';
 
 import EventList from '../EventList/EventList'
 import EventForm from '../EventForm/EventForm'
 import cuid from 'cuid'
 
 
-// connect to store using mapstatetoprops passing in the state
+// Step 3...connect to store using mapstatetoprops passing in the state
 const mapStateToProps = (state) => ({
     events: state.events
 })
+
+// Step 4 ... Create an actions object
+const mapDispatchToProps = {
+    createEvent,
+    updateEvent,
+    deleteEvent
+}
 
 
 class EventsDashboard extends Component {
@@ -45,8 +54,8 @@ class EventsDashboard extends Component {
     handleCreateEvent = (newEvent) => {
       newEvent.id = cuid();
       newEvent.hostPhotoURL = '/assets/user.png';
+      this.props.createEvent(newEvent);
       this.setState(({events}) => ({
-        events: [...events, newEvent],
         isOpen: false
       }));
     };
@@ -61,14 +70,8 @@ class EventsDashboard extends Component {
 
     // Handle Updating the event
     handleUpdateEvent = (updatedEvent) => {
+      this.props.updateEvent(updatedEvent);
       this.setState(({events}) => ({
-        events: events.map(event => {
-          if (event.id === updatedEvent.id) {
-            return {...updatedEvent}
-          } else {
-            return event
-          }
-        }),
         isOpen: false,
         selectedEvent: null
       }));
@@ -76,11 +79,7 @@ class EventsDashboard extends Component {
 
 
     handleDeleteEvent = (id) => {
-      this.setState(({events}) => ({
-        events: events.filter((e) => (
-          e.id !== id
-        ))
-      }))
+      this.props.deleteEvent(id);
     };
 
 
@@ -117,4 +116,4 @@ class EventsDashboard extends Component {
     }
 };
 
-export default connect(mapStateToProps)(EventsDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(EventsDashboard); // Step 3...
