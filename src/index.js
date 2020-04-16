@@ -21,7 +21,8 @@ experience
 const store = configureStore();
 
 // 1.12 logginf the store using getState()
-console.log(store.getState());
+// Uncomment to see
+// console.log(store.getState());
 
 const rootEl = document.getElementById("root");
 
