@@ -7,8 +7,6 @@ import {createEvent, updateEvent, deleteEvent} from '../eventActions';
 
 import EventList from '../EventList/EventList'
 
-import cuid from 'cuid'
-
 
 // Step 3...connect to store using mapstatetoprops passing in the state
 const mapStateToProps = (state) => ({
@@ -25,22 +23,6 @@ const mapDispatchToProps = {
 
 class EventsDashboard extends Component {
    
-    
-
-    // Handle Creating the event
-    handleCreateEvent = (newEvent) => {
-      newEvent.id = cuid();
-      newEvent.hostPhotoURL = '/assets/user.png';
-      this.props.createEvent(newEvent);
-    };
-
-
-    // Handle Updating the event
-    handleUpdateEvent = (updatedEvent) => {
-      this.props.updateEvent(updatedEvent);
-    };
-
-
     handleDeleteEvent = (id) => {
       this.props.deleteEvent(id);
     };
