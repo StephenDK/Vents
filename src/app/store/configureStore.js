@@ -6,6 +6,7 @@ import { createStore } from "redux";
 // 5.0 setting up the devToolEnhancer for a better development experience
 // import devToolEnhancer and add to createStore as second param
 import { devToolsEnhancer } from 'redux-devtools-extension';
+// 6.0 Refactoring begins in common/util/reducerUtils.js
 
 //4.3 import rootReducer and replace testReducer with
 // rootReducer
