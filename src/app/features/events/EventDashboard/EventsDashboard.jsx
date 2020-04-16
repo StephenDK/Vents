@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
 import { Grid, Button } from 'semantic-ui-react' 
+// CH 8 Step 3: Connect Component to store
+import { connect } from 'react-redux';
+
 import EventList from '../EventList/EventList'
 import EventForm from '../EventForm/EventForm'
 import cuid from 'cuid'
 
 
-
-
+// connect to store using mapstatetoprops passing in the state
+const mapStateToProps = (state) => ({
+    events: state.events
+})
 
 
 class EventsDashboard extends Component {
     state = {
-        events: eventsFromDashboard,
         isOpen: false,
         selectedEvent: null
     };
@@ -81,7 +85,8 @@ class EventsDashboard extends Component {
 
 
     render() {
-        const { events, isOpen, selectedEvent } = this.state;
+        const { isOpen, selectedEvent } = this.state;
+        const { events } = this.props;
         return (
             <Grid>
                 <Grid.Column width={10}>
@@ -112,4 +117,4 @@ class EventsDashboard extends Component {
     }
 };
 
-export default EventsDashboard;
+export default connect(mapStateToProps)(EventsDashboard);
