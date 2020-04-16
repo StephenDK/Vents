@@ -8,7 +8,9 @@ import { Button } from 'semantic-ui-react';
 // 2.3 create function to map store state to component props
 // and pass state to function set state data to new key.
 const mapStateToProps = (state) => ({
-    data: state.data
+    //data: state.data
+    //4.5 change to data: state.test.data because of rootReducer
+    data: state.test.data
 })
 
 //3.6 this is where you create mapDispatchToProps objects
@@ -19,6 +21,7 @@ const mapDispatchToProps = {
 };
 // 3.7 now pass the mapDispatchToProps to the connect function below
 // by adding it to connect the actions become available as props
+// Check reducers folder/ rootreducer file for 4.0
 
 class TestComponent extends Component {
     render() {
