@@ -3,10 +3,12 @@
 
 import { combineReducers } from "redux";
 import testReducer from '../features/testarea/testReducer';
+import eventReducer from "../features/events/eventReducer";
 
 // 4.1 to use the testReducer we can just call test
 const rootReducer = combineReducers({
-    test: testReducer
+    test: testReducer,
+    events: eventReducer
 })
 
 
