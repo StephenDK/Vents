@@ -13,7 +13,11 @@ import { reduxForm, Field } from "redux-form";
 import TextInput from "../../../common/form/TextInput";
 
 //9.10 Import the TextArea and pass into description field component
+// 9.11 Category Component found in common/form/SelectInput.jsx
 import TextArea from '../../../common/form/TextArea';
+
+//9.13 import SelectInput component and pass into category field
+import SelectInput from '../../../common/form/SelectInput';
 
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see
@@ -38,10 +42,21 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
+//9.13 these are the categories we are going to use in the selectInput component
+// pass as options
 const mapDispatchToProps = {
   createEvent,
   updateEvent,
 };
+
+const category = [
+    {key: 'drinks', text: 'Drinks', value: 'drinks'},
+    {key: 'culture', text: 'Culture', value: 'culture'},
+    {key: 'film', text: 'Film', value: 'film'},
+    {key: 'food', text: 'Food', value: 'food'},
+    {key: 'music', text: 'Music', value: 'music'},
+    {key: 'travel', text: 'Travel', value: 'travel'},
+];
 
 class EventForm extends Component {
 
@@ -84,7 +99,8 @@ class EventForm extends Component {
               />
               <Field
                 name="category"
-                component={TextInput}
+                component={SelectInput}
+                options={category}
                 placeholder="What is your event about"
               />
               <Field
