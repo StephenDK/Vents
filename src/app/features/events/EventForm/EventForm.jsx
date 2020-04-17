@@ -7,6 +7,9 @@ import cuid from 'cuid'
 // 9.1 import reduxForm and Field. reduxForm is a HOC and 
 // we must pass our form into
 import { reduxForm, Field } from 'redux-form';
+// 9.8 continued import new text field component and pass into
+// redux field component.
+import TextInput from '../../../common/form/TextInput';
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -83,8 +86,9 @@ class EventForm extends Component {
                 {/* 9.3 We can now start replacing the form fields with 
                     redux Field tag imported above. Instead of using the input component
                     we can create our own component with semantic ui styles and pass it in.
+                    9.4 in common/form/TextInput.jsx
                 */}
-                <Field name='title' component='input' placeholder='Event Title' />
+                <Field name='title' component={TextInput} placeholder='Event Title' />
                 <Form.Field>
                     <label>Event Date</label>
                     <input 
