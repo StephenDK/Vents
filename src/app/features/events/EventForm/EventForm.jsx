@@ -14,10 +14,10 @@ import TextInput from "../../../common/form/TextInput";
 
 //9.10 Import the TextArea and pass into description field component
 // 9.11 Category Component found in common/form/SelectInput.jsx
-import TextArea from '../../../common/form/TextArea';
+import TextArea from "../../../common/form/TextArea";
 
 //9.13 import SelectInput component and pass into category field
-import SelectInput from '../../../common/form/SelectInput';
+import SelectInput from "../../../common/form/SelectInput";
 
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see
@@ -25,20 +25,14 @@ const mapStateToProps = (state, ownProps) => {
   // console.log(ownProps.match.params.id);
   const eventId = ownProps.match.params.id;
 
-  let event = {
-    title: "",
-    date: "",
-    city: "",
-    venue: "",
-    hostedBy: "",
-  };
+  let event = {};
 
   if (eventId && state.events.length > 0) {
     event = state.events.filter((event) => event.id === eventId)[0];
   }
 
   return {
-    event,
+    initialValues: event,
   };
 };
 
@@ -50,43 +44,43 @@ const mapDispatchToProps = {
 };
 
 const category = [
-    {key: 'drinks', text: 'Drinks', value: 'drinks'},
-    {key: 'culture', text: 'Culture', value: 'culture'},
-    {key: 'film', text: 'Film', value: 'film'},
-    {key: 'food', text: 'Food', value: 'food'},
-    {key: 'music', text: 'Music', value: 'music'},
-    {key: 'travel', text: 'Travel', value: 'travel'},
+  { key: "drinks", text: "Drinks", value: "drinks" },
+  { key: "culture", text: "Culture", value: "culture" },
+  { key: "film", text: "Film", value: "film" },
+  { key: "food", text: "Food", value: "food" },
+  { key: "music", text: "Music", value: "music" },
+  { key: "travel", text: "Travel", value: "travel" },
 ];
 
 class EventForm extends Component {
-
-  handleFormSubmit = (evt) => {
-    evt.preventDefault();
-    // console.log(this.refs.title.value);
-    // console.log(this.state);
-    if (this.state.id) {
-      this.props.updateEvent(this.state);
-      this.props.history.push(`/events/${this.state.id}`);
+  onFormSubmit = (values) => {
+    console.log(values);
+    if (this.props.initialValues.id) {
+      this.props.updateEvent(values);
+      this.props.history.push(`/events/${this.props.initialValues.id}`);
     } else {
       const newEvent = {
-        ...this.state,
+        ...values,
         id: cuid(),
         hostPhotoURL: "/assets/user.png",
+        hostedBy: "Bob",
       };
       this.props.createEvent(newEvent);
-      this.props.history.push(`/events`);
+      this.props.history.push(`/events/${newEvent.id}`);
     }
   };
 
- 
-
   render() {
+    const { history, initialValues } = this.props;
     return (
       <Grid>
         <Grid.Column width={10}>
           <Segment>
-            <Header sub color='teal' content='Event Details' />
-            <Form onSubmit={this.handleFormSubmit} autoComplete="off">
+            <Header sub color="teal" content="Event Details" />
+            <Form
+              onSubmit={this.props.handleSubmit(this.onFormSubmit)}
+              autoComplete="off"
+            >
               {/* 9.3 We can now start replacing the form fields with 
                     redux Field tag imported above. Instead of using the input component
                     we can create our own component with semantic ui styles and pass it in.
@@ -109,7 +103,7 @@ class EventForm extends Component {
                 rows={3}
                 placeholder="Tell us about your event"
               />
-              <Header sub color='teal' content='Event Location Details' />
+              <Header sub color="teal" content="Event Location Details" />
               <Field
                 name="city"
                 component={TextInput}
@@ -124,7 +118,14 @@ class EventForm extends Component {
               <Button positive type="submit">
                 Submit
               </Button>
-              <Button type="button" onClick={this.props.history.goBack}>
+              <Button
+                type="button"
+                onClick={
+                  initialValues.id
+                    ? () => history.push(`/events/${initialValues.id}`)
+                    : () => history.push("/events")
+                }
+              >
                 Cancel
               </Button>
             </Form>
