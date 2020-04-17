@@ -9,7 +9,11 @@ import cuid from "cuid";
 import { reduxForm, Field } from "redux-form";
 // 9.8 continued... import new text field component and pass into
 // redux field component. We can replace all text fields with new component
+// 9.9 description component found in common/form/TextArea.jsx
 import TextInput from "../../../common/form/TextInput";
+
+//9.10 Import the TextArea and pass into description field component
+import TextArea from '../../../common/form/TextArea';
 
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see
@@ -85,7 +89,8 @@ class EventForm extends Component {
               />
               <Field
                 name="description"
-                component={TextInput}
+                component={TextArea}
+                rows={3}
                 placeholder="Tell us about your event"
               />
               <Header sub color='teal' content='Event Location Details' />
