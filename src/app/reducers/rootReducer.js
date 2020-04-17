@@ -5,8 +5,14 @@ import { combineReducers } from "redux";
 import testReducer from '../features/testarea/testReducer';
 import eventReducer from "../features/events/eventReducer";
 
+// Chapter 9.0 Adding Redux forms
+// To use redux from first import redux form reducer and add to root reducer
+// Then head over to the form where you want to configure
+import { reducer as FormReducer } from 'redux-form';
+
 // 4.1 to use the testReducer we can just call test
 const rootReducer = combineReducers({
+    form: FormReducer,
     test: testReducer,
     events: eventReducer
 })

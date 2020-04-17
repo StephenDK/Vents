@@ -4,6 +4,11 @@ import { connect } from 'react-redux';
 import {createEvent, updateEvent} from '../eventActions';
 import cuid from 'cuid'
 
+// 9.1 import reduxForm and Field. reduxForm is a HOC and 
+// we must pass our form into
+import { reduxForm, Field } from 'redux-form';
+
+
 const mapStateToProps = (state, ownProps) => {
     // Uncomment to see
     // console.log(ownProps.match);
@@ -75,14 +80,11 @@ class EventForm extends Component {
         return (
             <Segment>
             <Form onSubmit={this.handleFormSubmit} autoComplete='off'>
-                <Form.Field>
-                    <label>Event Title</label>
-                    <input 
-                    name='title'
-                    value={title} 
-                    onChange={this.handleTitleChange} 
-                    valplaceholder="Event Title" />
-                </Form.Field>
+                {/* 9.3 We can now start replacing the form fields with 
+                    redux Field tag imported above. Instead of using the input component
+                    we can create our own component with semantic ui styles and pass it in.
+                */}
+                <Field name='title' component='input' placeholder='Event Title' />
                 <Form.Field>
                     <label>Event Date</label>
                     <input 
@@ -126,5 +128,8 @@ class EventForm extends Component {
     }
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(EventForm);
+// 9.2 reduxForm requires some setup like the name of the form
+// Order of operations in this code below matters
+// Our connection function below takes two parameters. The redux from and the form component
+// Check the event form component in dev tools to see what we access to.
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({form: 'eventForm'})(EventForm));
