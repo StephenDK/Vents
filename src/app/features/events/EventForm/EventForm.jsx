@@ -19,6 +19,9 @@ import TextArea from "../../../common/form/TextArea";
 //9.13 import SelectInput component and pass into category field
 import SelectInput from "../../../common/form/SelectInput";
 
+// 9.17 import DateInput component and add date to validator
+import DateInput from "../../../common/form/DateInput";
+
 // 9.14 Import of revalidate from helper functions
 import {
   combineValidators,
@@ -75,6 +78,7 @@ const validate = combineValidators({
   )(),
   city: isRequired("City"),
   venue: isRequired("Venue"),
+  date: isRequired("Date"),
 });
 
 class EventForm extends Component {
@@ -146,8 +150,19 @@ class EventForm extends Component {
                 component={TextInput}
                 placeholder="Event venue"
               />
-              <Field name="date" component={TextInput} placeholder="Date" />
-              <Button disabled={invalid || submitting || pristine}positive type="submit">
+              <Field
+                name="date"
+                component={DateInput}
+                dateFormat="dd LLL yyyy h:mm a"
+                showTimeSelect
+                timeFormat='HH:mm'
+                placeholder="Date"
+              />
+              <Button
+                disabled={invalid || submitting || pristine}
+                positive
+                type="submit"
+              >
                 Submit
               </Button>
               <Button
@@ -177,3 +192,5 @@ export default connect(
   mapDispatchToProps
 )(reduxForm({ form: "eventForm", validate })(EventForm));
 //9.15 above we pass validate helper functions into event form
+
+// 9.16 Date Picker go to DateInput.jsx file
