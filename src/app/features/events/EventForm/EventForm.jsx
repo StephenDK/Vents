@@ -19,6 +19,14 @@ import TextArea from "../../../common/form/TextArea";
 //9.13 import SelectInput component and pass into category field
 import SelectInput from "../../../common/form/SelectInput";
 
+// 9.14 Import of revalidate from helper functions
+import {
+  combineValidators,
+  composeValidators,
+  isRequired,
+  hasLengthGreaterThan,
+} from "revalidate";
+
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see
   // console.log(ownProps.match);
@@ -52,6 +60,23 @@ const category = [
   { key: "travel", text: "Travel", value: "travel" },
 ];
 
+// 9.14 Revalidate form validation setup
+// first import combine validators and validate helper functions from revalidate
+// below is how you validate each form field with a return message if error
+// Now we have to pass validate into our redux form config function at the bottom
+const validate = combineValidators({
+  title: isRequired({ message: "The event title is required" }),
+  category: isRequired({ message: "The category is required" }),
+  description: composeValidators(
+    isRequired({ message: "Please enter a description" }),
+    hasLengthGreaterThan(4)({
+      message: "Description needs to be at least 5 characters",
+    })
+  )(),
+  city: isRequired("City"),
+  venue: isRequired("Venue"),
+});
+
 class EventForm extends Component {
   onFormSubmit = (values) => {
     console.log(values);
@@ -71,7 +96,14 @@ class EventForm extends Component {
   };
 
   render() {
-    const { history, initialValues } = this.props;
+    //9.16 to disable the submit button we can use some redux form props
+    const {
+      history,
+      initialValues,
+      invalid,
+      submitting,
+      pristine,
+    } = this.props;
     return (
       <Grid>
         <Grid.Column width={10}>
@@ -115,7 +147,7 @@ class EventForm extends Component {
                 placeholder="Event venue"
               />
               <Field name="date" component={TextInput} placeholder="Date" />
-              <Button positive type="submit">
+              <Button disabled={invalid || submitting || pristine}positive type="submit">
                 Submit
               </Button>
               <Button
@@ -143,4 +175,5 @@ class EventForm extends Component {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(reduxForm({ form: "eventForm" })(EventForm));
+)(reduxForm({ form: "eventForm", validate })(EventForm));
+//9.15 above we pass validate helper functions into event form
