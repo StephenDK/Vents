@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import  { connect } from 'react-redux';
 import { incrementCounter, decrementCounter } from './testActions';
 import { Button } from 'semantic-ui-react';
+import TestPlaceInput from './TestPlaceInput';
 
 
 // 2.3 create function to map store state to component props
@@ -35,6 +36,9 @@ class TestComponent extends Component {
                 <h3>The answer is {data}</h3>
                 <Button onClick={incrementCounter} positive content='Increment'></Button>
                 <Button onClick={decrementCounter} negative content='Decrement'></Button>
+                <br />
+                <br />
+                <TestPlaceInput />
             </div>
         )
     }
