@@ -29,6 +29,7 @@ import {
   isRequired,
   hasLengthGreaterThan,
 } from "revalidate";
+import PlaceInput from "../../../common/form/PlaceInput";
 
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see
@@ -142,12 +143,12 @@ class EventForm extends Component {
               <Header sub color="teal" content="Event Location Details" />
               <Field
                 name="city"
-                component={TextInput}
+                component={PlaceInput}
                 placeholder="Event city"
               />
               <Field
                 name="venue"
-                component={TextInput}
+                component={PlaceInput}
                 placeholder="Event venue"
               />
               <Field
