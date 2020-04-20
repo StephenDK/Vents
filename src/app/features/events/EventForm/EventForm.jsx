@@ -1,8 +1,10 @@
+/*global google*/
 import React, { Component } from "react";
 import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { createEvent, updateEvent } from "../eventActions";
 import cuid from "cuid";
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 // 9.1 import reduxForm and Field. reduxForm is a HOC and
 // we must pass our form into
@@ -83,8 +85,15 @@ const validate = combineValidators({
 });
 
 class EventForm extends Component {
+  state = {
+    cityLatLng: {},
+    venueLatLng: {} 
+  }
+
+
   onFormSubmit = (values) => {
-    console.log(values);
+    //console.log(values);
+    values.venueLatLng = this.state.venueLatLng;
     if (this.props.initialValues.id) {
       this.props.updateEvent(values);
       this.props.history.push(`/events/${this.props.initialValues.id}`);
@@ -99,6 +108,32 @@ class EventForm extends Component {
       this.props.history.push(`/events/${newEvent.id}`);
     }
   };
+
+  handleCitySelect = (selectedCity) => {
+    geocodeByAddress(selectedCity)
+      .then(results => getLatLng(results[0]))
+      .then(latlng => {
+        this.setState({
+          cityLatLng: latlng
+        })
+      })
+      .then(() => {
+        this.props.change('city', selectedCity)
+      })
+  }
+
+  handleVenueSelect = (selectedVenue) => {
+    geocodeByAddress(selectedVenue)
+      .then(results => getLatLng(results[0]))
+      .then(latlng => {
+        this.setState({
+          venueLatLng: latlng
+        })
+      })
+      .then(() => {
+        this.props.change('venue', selectedVenue)
+      })
+  }
 
   render() {
     //9.16 to disable the submit button we can use some redux form props
@@ -144,12 +179,20 @@ class EventForm extends Component {
               <Field
                 name="city"
                 component={PlaceInput}
+                options={{types: ['(cities)']}}
+                onSelect={this.handleCitySelect}
                 placeholder="Event city"
               />
               <Field
                 name="venue"
                 component={PlaceInput}
-                placeholder="Event venue"
+                options={{
+                  location: new google.maps.LatLng(this.state.cityLatLng),
+                  radius: 1000,
+                  types: ['establishment']
+                }}
+                onSelect={this.handleVenueSelect}
+                placeholder="Event Venue"
               />
               <Field
                 name="date"
