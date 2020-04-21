@@ -53,7 +53,6 @@ const EventDetailedHeader = ({ event }) => {
           as={Link}
           to={`/manage/${event.id}`}
           color="orange"
-          margin
         >
           Manage Event
         </Button>
