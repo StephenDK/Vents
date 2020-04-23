@@ -6,6 +6,7 @@ import { Button } from "semantic-ui-react";
 import TestPlaceInput from "./TestPlaceInput";
 import SimpleMap from "./SimpleMap";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import {openModal} from '../modals/modalActions';
 
 // 2.3 create function to map store state to component props
 // and pass state to function set state data to new key.
@@ -20,6 +21,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   incrementCounter,
   decrementCounter,
+  openModal
 };
 // 3.7 now pass the mapDispatchToProps to the connect function below
 // by adding it to connect the actions become available as props
@@ -46,7 +48,7 @@ class TestComponent extends Component {
   };
 
   render() {
-    const { data, incrementCounter, decrementCounter } = this.props; // 3.8 destruct props
+    const { data, incrementCounter, decrementCounter, openModal } = this.props; // 3.8 destruct props
 
     return (
       <div>
@@ -64,6 +66,11 @@ class TestComponent extends Component {
           onClick={decrementCounter}
           negative
           content="Decrement"
+        ></Button>
+        <Button
+          onClick={() => {openModal('TestModal', {data: 42})}}
+          color='teal'
+          content="Open Modal"
         ></Button>
         <br />
         <br />
