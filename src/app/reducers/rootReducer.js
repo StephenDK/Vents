@@ -11,13 +11,15 @@ import eventReducer from "../features/events/eventReducer";
 // Then head over to the form where you want to configure
 import { reducer as FormReducer } from 'redux-form';
 import modalReducer from "../features/modals/modalReducer";
+import authReducer from "../features/auth/authReducer";
 
 // 4.1 to use the testReducer we can just call test
 const rootReducer = combineReducers({
     form: FormReducer,
     test: testReducer,
     events: eventReducer,
-    modals: modalReducer
+    modals: modalReducer,
+    auth: authReducer
 })
 
 
