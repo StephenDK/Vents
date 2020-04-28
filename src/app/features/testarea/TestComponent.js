@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // 2.1 Bring in HOC connect to connect component to store
 import { connect } from "react-redux";
-import { incrementCounter, decrementCounter } from "./testActions";
+import { incrementCounter, decrementCounter, nameChange } from "./testActions";
 import { Button } from "semantic-ui-react";
 import TestPlaceInput from "./TestPlaceInput";
 import SimpleMap from "./SimpleMap";
@@ -11,9 +11,11 @@ import {openModal} from '../modals/modalActions';
 // 2.3 create function to map store state to component props
 // and pass state to function set state data to new key.
 const mapStateToProps = (state) => ({
+  
   //data: state.data
   //4.5 change to data: state.test.data because of rootReducer
   data: state.test.data,
+  name: state.test.name
 });
 
 //3.6 this is where you create mapDispatchToProps objects
@@ -21,7 +23,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   incrementCounter,
   decrementCounter,
-  openModal
+  openModal,
+  nameChange
 };
 // 3.7 now pass the mapDispatchToProps to the connect function below
 // by adding it to connect the actions become available as props
@@ -48,7 +51,7 @@ class TestComponent extends Component {
   };
 
   render() {
-    const { data, incrementCounter, decrementCounter, openModal } = this.props; // 3.8 destruct props
+    const { name, nameChange, data, incrementCounter, decrementCounter, openModal } = this.props; // 3.8 destruct props
 
     return (
       <div>
@@ -57,6 +60,12 @@ class TestComponent extends Component {
                     check testConstants for 3.0
                 */}
         <h3>The answer is {data}</h3>
+        <h3>Your name is {name}</h3>
+        <Button
+          onClick={nameChange}
+          positive
+          content="Change Name"
+        ></Button>
         <Button
           onClick={incrementCounter}
           positive

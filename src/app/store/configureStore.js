@@ -1,29 +1,23 @@
-import { createStore } from "redux";
-
-//import testReducer from '../features/testarea/testReducer';
+import { createStore, applyMiddleware } from "redux";
 
 
-// 5.0 setting up the devToolEnhancer for a better development experience
-// import devToolEnhancer and add to createStore as second param
-import { devToolsEnhancer } from 'redux-devtools-extension';
-// 6.0 Refactoring begins in common/util/reducerUtils.js
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-//4.3 import rootReducer and replace testReducer with
-// rootReducer
 import rootReducer from '../reducers/rootReducer';
+import thunk from "redux-thunk";
 
 
+// Chanpter 12.0 Configuring Redux thunk
+// We first have to configure our store to use the redux thunk middlware
 export const configureStore = () => {
-    // 1.1 store requires a reducer and store enhancer
-    // 1.2 create a file "testReducer"
+    // 12.1 We have to configure createStore to use our reducers, middleware, and devTools
+    // below is how we pass them all into createStore
+    const middlewares = [thunk];
+    
+    const composedEnhancer = composeWithDevTools(applyMiddleware(...middlewares));
 
-    // 1.7 import test reducer add pass into createStore
-    // const store = createStore(testReducer);
-    // 1.8 connect store to appliation using <Provider> ...See index.js
-
-    const store = createStore(rootReducer, devToolsEnhancer());  
-    // 4.4 Since the testReducer is accessed throught test now
-    // we have to change mapStateToProps function in testComponent
-    // data: state.test.data
+    const store = createStore(rootReducer, composedEnhancer);  
+    // 12.2 found in features/async/asyncConstants
+    
     return store;
 }

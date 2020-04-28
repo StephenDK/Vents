@@ -1,4 +1,4 @@
-import { INCREMENT_COUNTER, DECREMENT_COUNTER } from "./testConstants";
+import { INCREMENT_COUNTER, DECREMENT_COUNTER, CHANGE_NAME } from "./testConstants";
 
 // 3.1 An action is an object with a type and payload key
 // The type key is for the imported action
@@ -21,5 +21,11 @@ export const incrementCounter = () => {
 export const decrementCounter = () => {
     return {
         type: DECREMENT_COUNTER
+    }
+}
+
+export const nameChange = () => {
+    return {
+        type: CHANGE_NAME
     }
 }

@@ -1,9 +1,10 @@
-import { INCREMENT_COUNTER, DECREMENT_COUNTER } from "./testConstants";
+import { INCREMENT_COUNTER, DECREMENT_COUNTER, CHANGE_NAME } from "./testConstants";
 import { createReducer } from "../../common/util/reducerUtils";
 
 // 1.3 Initialize the state
 const initialState = {
-    data: 42
+    data: 42,
+    name: 'Stephen'
 }
 
 // ================================================
@@ -11,6 +12,7 @@ const initialState = {
 // We are refactoring the code below into this
 
 const incrementCounter = (state) => {
+    console.log(state);
     return { ...state, data: state.data + 1 };
 }
 
@@ -18,12 +20,16 @@ const decrementCounter = (state) => {
     return { ...state, data: state.data - 1 };
 }
 
+const nameChange = (state) => {
+    return { ...state, name: 'Bob'}
+}
 // ================================================
 
 // 6.1 import createReducer and export it
 export default createReducer(initialState, {
     [INCREMENT_COUNTER]: incrementCounter,
-    [DECREMENT_COUNTER]: decrementCounter
+    [DECREMENT_COUNTER]: decrementCounter,
+    [CHANGE_NAME]: nameChange
 })
 
 // 1.4 create a reducer

@@ -12,6 +12,7 @@ import eventReducer from "../features/events/eventReducer";
 import { reducer as FormReducer } from 'redux-form';
 import modalReducer from "../features/modals/modalReducer";
 import authReducer from "../features/auth/authReducer";
+import asyncReducer from "../features/async/asyncReducer";
 
 // 4.1 to use the testReducer we can just call test
 const rootReducer = combineReducers({
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     test: testReducer,
     events: eventReducer,
     modals: modalReducer,
-    auth: authReducer
+    auth: authReducer,
+    async: asyncReducer
 })
 
 
