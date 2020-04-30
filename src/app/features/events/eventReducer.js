@@ -1,7 +1,7 @@
 // CH 8 Step 3: Event Reducers
 
 import { createReducer } from '../../common/util/reducerUtils';
-import { UPDATE_EVENT, CREATE_EVENT, DELETE_EVENT } from './eventConstants';
+import { UPDATE_EVENT, CREATE_EVENT, DELETE_EVENT, FETCH_EVENTS } from './eventConstants';
 
 // create initial state
  const initialState = [];
@@ -26,11 +26,20 @@ const deleteEvent = (state, payload) => {
     ]
 }
 
+// 12.23 this reducer will take the dispatched action with our events 
+// and save them to the store
+// after add to our createReducer lookup
+const fetchEvents = (state, payload) => {
+  return payload.events
+}
+// 12.24 to call this fetch function we can do it directly from index.js
+
 // now use our reducer functions
 export default createReducer(initialState, {
     [CREATE_EVENT]: createEvent,
     [UPDATE_EVENT]: updateEvent,
-    [DELETE_EVENT]: deleteEvent
+    [DELETE_EVENT]: deleteEvent,
+    [FETCH_EVENTS]: fetchEvents
 })
 
 // DONT FORGET TO ADD TO ROOT REDUCER

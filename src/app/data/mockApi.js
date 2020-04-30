@@ -12,3 +12,5 @@ export const fetchSampleData = () => {
         return Promise.resolve(sampleData)
     })
 }
+
+// 12.19 head to eventConstants.js to add new action constant

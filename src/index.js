@@ -16,13 +16,12 @@ automatically. This can make for a nicer development
 experience 
 
 */
+import { loadEvents } from './app/features/events/eventActions';
 
-// 1.11 pass to the Provider our store instance
 const store = configureStore();
+// 12.25 our store can dispatch actions
+store.dispatch(loadEvents())
 
-// 1.12 logginf the store using getState()
-// Uncomment to see
-// console.log(store.getState());
 
 const rootEl = document.getElementById("root");
 
