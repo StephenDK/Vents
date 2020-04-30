@@ -93,6 +93,7 @@ class TestComponent extends Component {
           name='increment'
           // 12.16 we can check is the elementName equals the button name
           // and then deisplay loading if it does.
+          // 12.17 Creating a moch api. head to data folder/sampleDate.js
           loading={buttonName === 'increment' && loading}
           positive
           content="Async Increment"
