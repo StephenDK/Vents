@@ -21,6 +21,7 @@ import { loadEvents } from './app/features/events/eventActions';
 const store = configureStore();
 // 12.25 our store can dispatch actions
 store.dispatch(loadEvents())
+// 12.26 start of a page loading indicator. head to layout/loading component
 
 
 const rootEl = document.getElementById("root");

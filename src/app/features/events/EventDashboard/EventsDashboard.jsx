@@ -6,11 +6,14 @@ import { connect } from 'react-redux';
 import {createEvent, updateEvent, deleteEvent} from '../eventActions';
 
 import EventList from '../EventList/EventList'
+import LoadingComponent from '../../../layout/loadingComponent';
 
 
-// Step 3...connect to store using mapstatetoprops passing in the state
+// 12.29 first get the loading state from redux and pass to 
+// component as props
 const mapStateToProps = (state) => ({
-    events: state.events
+    events: state.events,
+    loading: state.async.loading
 })
 
 // Step 4 ... Create an actions object
@@ -29,7 +32,11 @@ class EventsDashboard extends Component {
 
 
     render() {
-        const { events } = this.props;
+        const { events, loading } = this.props;
+        // 12.30 if the loading state is true in our store 
+        // show loading component else load dashboard
+        // head to authActions to add redux thunk to loging In
+        if (loading) return <LoadingComponent />
         return (
             <Grid>
                 <Grid.Column width={10}>
