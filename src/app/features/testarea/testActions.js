@@ -1,6 +1,7 @@
 import { INCREMENT_COUNTER, DECREMENT_COUNTER, CHANGE_NAME } from "./testConstants";
 
 import { asyncActionStart, asyncActionFinished } from '../async/asyncActions';
+import { ASYNC_ACTION_START } from "../async/asyncConstants";
 // 3.1 An action is an object with a type and payload key
 // The type key is for the imported action
 // {
@@ -34,25 +35,31 @@ const delay = (ms) => {
 // after we dispatch the incrementCounter that adds 1 to the current value 
 // in state and then asyncActionFinished which sets loading to false
 // Below is an examplke of async chaining without using .then()
-export const incrementAsync = () => {
+export const incrementAsync = (name) => {
+    // 12.14 these actions are now receiving the button name
+    // we specified name as a parameter now we have access to the button name
+    // now we must pass the button name to the dispatch dispatch(asyncActionStart(name))
+    // the way above wont work so we must specify the action type
+    // check redux chrome dev tool for update then head to testComponent
     return async dispatch => {
-        dispatch(asyncActionStart())
+        dispatch({type: ASYNC_ACTION_START, payload: name})
         await delay(1000);
         dispatch(incrementCounter())
         dispatch(asyncActionFinished())
     }
 }
 
-export const decrementAsync = () => {
+export const decrementAsync = (name) => {
     return async dispatch => {
-        dispatch(asyncActionStart())
+        dispatch({type: ASYNC_ACTION_START, payload: name})
         await delay(1000);
         dispatch({type: DECREMENT_COUNTER}) //two ways to dispatch action
         dispatch(asyncActionFinished())
     }
 }
 // 12.9 Head over to test component
-
+// and import the actions and place in mapDispatchToProps
+// after we can use the actions in our buttons
 
 
 // Practice redux

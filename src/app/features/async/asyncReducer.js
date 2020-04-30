@@ -4,28 +4,39 @@ import { ASYNC_ACTION_START, ASYNC_ACTION_FINISH, ASYNC_ACTION_ERROR } from "./a
 
 // 12.4 next create the initial state 
 const initialState = {
-    loading: false
+    loading: false,
+    // 12.11 we will add the name of the button clicked into our store
+    elementName: null
 }
 
 // 12.5 now create our reducers 
-const asyncActionStarted = (state) => {
+const asyncActionStarted = (state, payload) => {
+    // 12.12 To get the button name we must add payload because thats how we get
+    // whatever is passed into our action in testComponent
     return {
         ...state,
-        loading: true
+        loading: true,
+        elementName: payload
     }
 }
 
 const asyncActionFinished = (state) => {
+    // 12.13 when we are finished loading set the elementName to null
+    // do the same for the asyncActionError
+    // now how dod we get the payload over to these functions?
+    // head over to asyncActions file
     return {
         ...state,
-        loading: false
+        loading: false,
+        elementName: null
     }
 }
 
 const asyncActionError = (state) => {
     return {
         ...state,
-        loading: false
+        loading: false,
+        elementName: null
     }
 }
 

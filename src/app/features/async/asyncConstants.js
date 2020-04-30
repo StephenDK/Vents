@@ -1,3 +1,4 @@
+// 12.1 Redux Thunk setup starts in the configure store file
 // 12.2 creating our action types
 export const ASYNC_ACTION_START = 'ASYNC_ACTION_START';
 export const ASYNC_ACTION_FINISH = 'ASYNC_ACTION_FINISH';

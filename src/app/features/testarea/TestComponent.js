@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-// 2.1 Bring in HOC connect to connect component to store
+
 import { connect } from "react-redux";
-// 12.9 import new async functions and add to mapDispatchToProps
+
 import {
   incrementCounter,
   decrementCounter,
@@ -9,24 +9,22 @@ import {
   incrementAsync,
   decrementAsync,
 } from "./testActions";
+
 import { Button } from "semantic-ui-react";
 import TestPlaceInput from "./TestPlaceInput";
 import SimpleMap from "./SimpleMap";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { openModal } from "../modals/modalActions";
 
-// 2.3 create function to map store state to component props
-// and pass state to function set state data to new key.
+// 12.15 now access the elementName from the store to check if the elementName
+// is the same as the button name and then display loading 
 const mapStateToProps = (state) => ({
-  //data: state.data
-  //4.5 change to data: state.test.data because of rootReducer
   data: state.test.data,
   name: state.test.name,
-  loading: state.async.loading
+  loading: state.async.loading,
+  buttonName: state.async.elementName
 });
 
-//3.6 this is where you create mapDispatchToProps objects
-// with the action creators
 const mapDispatchToProps = {
   incrementCounter,
   decrementCounter,
@@ -35,9 +33,6 @@ const mapDispatchToProps = {
   incrementAsync,
   decrementAsync
 };
-// 3.7 now pass the mapDispatchToProps to the connect function below
-// by adding it to connect the actions become available as props
-// Check reducers folder/ rootreducer file for 4.0
 
 class TestComponent extends Component {
   state = {
@@ -69,15 +64,13 @@ class TestComponent extends Component {
       openModal,
       incrementAsync,
       decrementAsync,
-      loading
-    } = this.props; // 3.8 destruct props
+      loading,
+      buttonName
+    } = this.props;
 
     return (
       <div>
         <h1>Test Component</h1>
-        {/* 2.5 access the state date using props 
-                    check testConstants for 3.0
-                */}
         <h3>The answer is {data}</h3>
         <h3>Your name is {name}</h3>
         <Button onClick={nameChange} positive content="Change Name"></Button>
@@ -92,14 +85,22 @@ class TestComponent extends Component {
           content="Decrement"
         ></Button>
         <Button
-          onClick={incrementAsync}
-          loading={loading}
+          onClick={(e) => incrementAsync(e.target.name)}
+          // 12.10 Redux Thunk comes with a loading property. To isolate our loading
+          // property to a specific button give buttons a name. Now we have to pass 
+          // the name of the button as a parameter. make onClick into arrow functions
+          // after head to asyncReducer to store the name of the button
+          name='increment'
+          // 12.16 we can check is the elementName equals the button name
+          // and then deisplay loading if it does.
+          loading={buttonName === 'increment' && loading}
           positive
           content="Async Increment"
         ></Button>
         <Button
-          onClick={decrementAsync}
-          loading={loading}
+          onClick={(e) => decrementAsync(e.target.name)}
+          loading={buttonName === 'decrement' && loading}
+          name='decrement'
           positive
           content="Async Decrement"
         ></Button>
@@ -119,10 +120,6 @@ class TestComponent extends Component {
   }
 }
 
-// 2.2 wrap the component in the connect component
-export default connect(mapStateToProps, mapDispatchToProps)(TestComponent);
-// 2.4 pass mapStateToProps to connect function
 
-// Redux setup steps
-// 1. Setup the redux store inside app
-// View store folder > configureStore.js file
+export default connect(mapStateToProps, mapDispatchToProps)(TestComponent);
+
