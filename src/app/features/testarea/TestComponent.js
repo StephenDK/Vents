@@ -1,21 +1,28 @@
 import React, { Component } from "react";
 // 2.1 Bring in HOC connect to connect component to store
 import { connect } from "react-redux";
-import { incrementCounter, decrementCounter, nameChange } from "./testActions";
+// 12.9 import new async functions and add to mapDispatchToProps
+import {
+  incrementCounter,
+  decrementCounter,
+  nameChange,
+  incrementAsync,
+  decrementAsync,
+} from "./testActions";
 import { Button } from "semantic-ui-react";
 import TestPlaceInput from "./TestPlaceInput";
 import SimpleMap from "./SimpleMap";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
-import {openModal} from '../modals/modalActions';
+import { openModal } from "../modals/modalActions";
 
 // 2.3 create function to map store state to component props
 // and pass state to function set state data to new key.
 const mapStateToProps = (state) => ({
-  
   //data: state.data
   //4.5 change to data: state.test.data because of rootReducer
   data: state.test.data,
-  name: state.test.name
+  name: state.test.name,
+  loading: state.async.loading
 });
 
 //3.6 this is where you create mapDispatchToProps objects
@@ -24,7 +31,9 @@ const mapDispatchToProps = {
   incrementCounter,
   decrementCounter,
   openModal,
-  nameChange
+  nameChange,
+  incrementAsync,
+  decrementAsync
 };
 // 3.7 now pass the mapDispatchToProps to the connect function below
 // by adding it to connect the actions become available as props
@@ -35,7 +44,7 @@ class TestComponent extends Component {
     latlng: {
       lat: 59.95,
       lng: 30.33,
-    }
+    },
   };
 
   handleSelect = (address) => {
@@ -51,7 +60,17 @@ class TestComponent extends Component {
   };
 
   render() {
-    const { name, nameChange, data, incrementCounter, decrementCounter, openModal } = this.props; // 3.8 destruct props
+    const {
+      name,
+      nameChange,
+      data,
+      incrementCounter,
+      decrementCounter,
+      openModal,
+      incrementAsync,
+      decrementAsync,
+      loading
+    } = this.props; // 3.8 destruct props
 
     return (
       <div>
@@ -61,11 +80,7 @@ class TestComponent extends Component {
                 */}
         <h3>The answer is {data}</h3>
         <h3>Your name is {name}</h3>
-        <Button
-          onClick={nameChange}
-          positive
-          content="Change Name"
-        ></Button>
+        <Button onClick={nameChange} positive content="Change Name"></Button>
         <Button
           onClick={incrementCounter}
           positive
@@ -77,8 +92,22 @@ class TestComponent extends Component {
           content="Decrement"
         ></Button>
         <Button
-          onClick={() => {openModal('TestModal', {data: 42})}}
-          color='teal'
+          onClick={incrementAsync}
+          loading={loading}
+          positive
+          content="Async Increment"
+        ></Button>
+        <Button
+          onClick={decrementAsync}
+          loading={loading}
+          positive
+          content="Async Decrement"
+        ></Button>
+        <Button
+          onClick={() => {
+            openModal("TestModal", { data: 42 });
+          }}
+          color="teal"
           content="Open Modal"
         ></Button>
         <br />

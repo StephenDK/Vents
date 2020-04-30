@@ -40,3 +40,4 @@ export default createReducer(initialState, {
 
 // 12.6 last step add these reducers to the rootReducer
 // head to rootReducer.js
+// After rootreducer we are in the test area testActions file
