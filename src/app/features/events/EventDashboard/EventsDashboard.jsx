@@ -7,6 +7,7 @@ import {createEvent, updateEvent, deleteEvent} from '../eventActions';
 
 import EventList from '../EventList/EventList'
 import LoadingComponent from '../../../layout/loadingComponent';
+import EventActivity from '../EventActivity/EventActivity';
 
 
 // 12.29 first get the loading state from redux and pass to 
@@ -46,7 +47,7 @@ class EventsDashboard extends Component {
                     />
                 </Grid.Column>
                 <Grid.Column width={6}>
-                   <h2>Activity Feed</h2> 
+                   <EventActivity /> 
                 </Grid.Column>
             </Grid>
         )
