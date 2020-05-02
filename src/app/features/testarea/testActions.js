@@ -1,6 +1,6 @@
 import { INCREMENT_COUNTER, DECREMENT_COUNTER, CHANGE_NAME } from "./testConstants";
 
-import { asyncActionStart, asyncActionFinished } from '../async/asyncActions';
+import { asyncActionFinished } from '../async/asyncActions';
 import { ASYNC_ACTION_START } from "../async/asyncConstants";
 // 3.1 An action is an object with a type and payload key
 // The type key is for the imported action
