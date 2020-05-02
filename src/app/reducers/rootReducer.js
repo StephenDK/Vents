@@ -1,30 +1,30 @@
-// 4.0 We are going to combine reducers using 
-// the redux combine reducers function
-
+// 13.0 configuring redux-toaster for notifications
+// first import the reducer from redux-toaster
+// theadd redux-toastr to the combineReducers function
+import { reducer as ToastrReducer } from 'react-redux-toastr';
 import { combineReducers } from "redux";
 import testReducer from '../features/testarea/testReducer';
 import eventReducer from "../features/events/eventReducer";
 
 
-// Chapter 9.0 Adding Redux forms
-// To use redux from first import redux form reducer and add to root reducer
-// Then head over to the form where you want to configure
+
 import { reducer as FormReducer } from 'redux-form';
 import modalReducer from "../features/modals/modalReducer";
 import authReducer from "../features/auth/authReducer";
 import asyncReducer from "../features/async/asyncReducer";
 
-// 4.1 to use the testReducer we can just call test
+
 const rootReducer = combineReducers({
     form: FormReducer,
     test: testReducer,
     events: eventReducer,
     modals: modalReducer,
     auth: authReducer,
-    async: asyncReducer
+    async: asyncReducer,
+    toastr: ToastrReducer
 })
+// 13.1 we must add the redux=toastr component to the root of our app
+// head to index.js
 
 
-//4.2 export rootReducer
-// next head to store to import rootReducer
 export default rootReducer;
