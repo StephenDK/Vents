@@ -16,7 +16,7 @@ automatically. This can make for a nicer development
 experience 
 
 */
-import { loadEvents } from "./app/features/events/eventActions";
+// import { loadEvents } from "./app/features/events/eventActions";
 
 // 13.2 import the redux toastr component also import the css styles for the component
 import ReduxToastr from "react-redux-toastr";
@@ -29,7 +29,7 @@ import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 
 const store = configureStore();
 // 12.25 our store can dispatch actions
-store.dispatch(loadEvents());
+// store.dispatch(loadEvents());
 // 12.26 start of a page loading indicator. head to layout/loading component
 
 const rootEl = document.getElementById("root");
