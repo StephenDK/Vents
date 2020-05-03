@@ -1,23 +1,34 @@
 import { createStore, applyMiddleware } from "redux";
 
+import { composeWithDevTools } from "redux-devtools-extension";
 
-import { composeWithDevTools } from 'redux-devtools-extension';
-
-import rootReducer from '../reducers/rootReducer';
+import rootReducer from "../reducers/rootReducer";
 import thunk from "redux-thunk";
+import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
+import { reduxFirestore, getFirestore } from "redux-firestore";
+import firebase from "../config/firebase";
 
+const rrfConfig = {
+  userProfile: "users",
+  attachAuthIsReady: true,
+  useFirestoreForProfile: true,
+};
 
 // Chanpter 12.0 Configuring Redux thunk
 // We first have to configure our store to use the redux thunk middlware
 export const configureStore = () => {
-    // 12.1 We have to configure createStore to use our reducers, middleware, and devTools
-    // below is how we pass them all into createStore
-    const middlewares = [thunk];
-    
-    const composedEnhancer = composeWithDevTools(applyMiddleware(...middlewares));
+  // 12.1 We have to configure createStore to use our reducers, middleware, and devTools
+  // below is how we pass them all into createStore
+  const middlewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
 
-    const store = createStore(rootReducer, composedEnhancer);  
-    // 12.2 found in features/async/asyncConstants
-    
-    return store;
-}
+  const composedEnhancer = composeWithDevTools(
+    applyMiddleware(...middlewares),
+    reactReduxFirebase(firebase, rrfConfig),
+    reduxFirestore(firebase)
+  );
+
+  const store = createStore(rootReducer, composedEnhancer);
+  // 12.2 found in features/async/asyncConstants
+
+  return store;
+};
