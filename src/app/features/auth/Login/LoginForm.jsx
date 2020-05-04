@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Segment, Button } from "semantic-ui-react";
+import { Form, Segment, Button, Label } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import { login } from "../authActions";
 import TextInput from "../../../common/form/TextInput";
@@ -9,9 +9,11 @@ const mapDispatchToProps = {
   login,
 };
 
-const LoginForm = ({ login, handleSubmit }) => {
+// 15.3 since our form is already conect to redux-form bring in the error
+// property from redux form
+const LoginForm = ({ login, handleSubmit, error }) => {
   return (
-    <Form error size="large" onSubmit={handleSubmit(login)} autoComplete='off'>
+    <Form size="large" onSubmit={handleSubmit(login)} autoComplete='off'>
       <Segment>
         <Field
           name="email"
@@ -25,6 +27,7 @@ const LoginForm = ({ login, handleSubmit }) => {
           type="password"
           placeholder="password"
         />
+        {error && <Label basic color='red'>{error}</Label>}
         <Button fluid size="large" color="teal">
           Login
         </Button>

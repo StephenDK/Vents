@@ -1,8 +1,11 @@
+// 15.1 displaying firebase login errors to user
+// import SubmissionError from redux form
+import { SubmissionError } from 'redux-form';
+
 import { SIGN_OUT_USER } from "./authConstants";
 import { closeModal } from "../modals/modalActions";
 
-// 12.31 we refactored the code below to allow for async operations
-// since we will fetch user from database
+
 export const login = (creds) => {
   // 15.0 Firebase login setup.
   // we need to use firebase option with redux thunk
@@ -14,12 +17,17 @@ export const login = (creds) => {
       await firebase.auth().signInWithEmailAndPassword(creds.email, creds.password)
       dispatch(closeModal())
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      // 15.1 we throw a new Submission error with the error message
+      // and this becomes available in our form
+      // head over to the login form
+      throw new SubmissionError({
+        _error: error.message
+      })
     }
   };
 };
-// 12.32 lastly we need to hide the createEvent and people button 
-// on the dashboard. head over to dashboard
+
 
 
 export const logout = () => {
