@@ -5,13 +5,13 @@ import { connect } from "react-redux";
 import { openModal } from "../../modals/modalActions";
 import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
-import { logout } from "../../auth/authActions";
+//import { logout } from "../../auth/authActions";
 
 import { withFirebase } from 'react-redux-firebase';
 
 const mapDispatchToProps = {
   openModal,
-  logout,
+  //logout,
 };
 
 // 15.4 our authentication is already stored in firebase so instead of using
