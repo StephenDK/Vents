@@ -27,6 +27,10 @@ const LoginForm = ({ login, handleSubmit, error }) => {
           type="password"
           placeholder="password"
         />
+        {/* Below we output a label with the error message from redux-form
+          if an error exists.
+          15.4 using firebase to signout head to NavBar.jsx
+        */}
         {error && <Label basic color='red'>{error}</Label>}
         <Button fluid size="large" color="teal">
           Login

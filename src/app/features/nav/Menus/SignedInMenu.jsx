@@ -2,11 +2,15 @@ import React from "react";
 import { Menu, Image, Dropdown } from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 
-const SignedInMenu = ({signOut, currentUser}) => {
+// 15.7 we are passing in the authenticaed user from firebase as auth
+// and displaying their email below
+// head back to navbar
+// Head over to authactions for 15.8
+const SignedInMenu = ({signOut, auth}) => {
   return (
     <Menu.Item position="right">
       <Image avatar spaced="right" src="/assets/user.png" />
-      <Dropdown pointing="top left" text={currentUser}>
+      <Dropdown pointing="top left" text={auth.email}>
         <Dropdown.Menu>
           <Dropdown.Item text="Create Event" icon="plus" />
           <Dropdown.Item text="My Events" icon="calendar" />

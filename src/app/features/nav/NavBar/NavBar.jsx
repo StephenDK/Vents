@@ -7,13 +7,20 @@ import SignedOutMenu from "../Menus/SignedOutMenu";
 import SignedInMenu from "../Menus/SignedInMenu";
 import { logout } from "../../auth/authActions";
 
+import { withFirebase } from 'react-redux-firebase';
+
 const mapDispatchToProps = {
   openModal,
   logout,
 };
 
+// 15.4 our authentication is already stored in firebase so instead of using
+// the auth reducer below use firebase
+// to handle the logout we also need to import withFirebase from react-redux-firebase
+// after importing withFirebase we must connect this component to the withFirebase HOC
 const mapStateToProps = (state) => ({
-  auth: state.auth,
+  //auth: state.auth,
+  auth: state.firebase.auth
 });
 
 class NavBar extends Component {
@@ -24,15 +31,16 @@ class NavBar extends Component {
   handleRegister = () => {
     this.props.openModal("RegisterModal");
   };
-
+  // 15.7 to logout the user use the firebase logout method below
   handleSignOut = () => {
-    this.props.logout();
+    this.props.firebase.logout();
     this.props.history.push("/");
   };
 
   render() {
     const { auth } = this.props;
-    const authenticated = auth.authenticated;
+    // 15.5 below is our check to make sure we are authenticated
+    const authenticated = auth.isLoaded && !auth.isEmpty;
     return (
       <Menu inverted fixed="top">
         <Container>
@@ -59,8 +67,9 @@ class NavBar extends Component {
           )}
           {authenticated ? (
             <SignedInMenu
+            // 15.6 Head to signed in menu
               signOut={this.handleSignOut}
-              currentUser={auth.currentUser}
+              auth={auth}
             />
           ) : (
             <SignedOutMenu
@@ -74,4 +83,5 @@ class NavBar extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar));
+export default withRouter(withFirebase(connect(mapStateToProps, mapDispatchToProps)(NavBar)));
+// 15.5 wrapping our component withFirebase gives us access to the firebase methods
