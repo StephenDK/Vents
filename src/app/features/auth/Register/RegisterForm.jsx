@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Segment, Button, Label } from "semantic-ui-react";
+import { Form, Segment, Button, Label, Divider } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import TextInput from "../../../common/form/TextInput";
 // 15.9 first import connect and connect component to the store
@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { registerUser } from "../authActions";
 // 15.11 bring in combine validators
 import { combineValidators, isRequired } from "revalidate";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 const mapDispatchToProps = {
   registerUser,
@@ -20,8 +21,17 @@ const validate = combineValidators({
   password: isRequired("password"),
 });
 // after add validate object to the redux form in connect
+// and the label that will display the error if it exists
+// next adding other types of login
+// 15.13 head to SocialLogin/SocialLogin.jsx
 
-const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting }) => {
+const RegisterForm = ({
+  handleSubmit,
+  registerUser,
+  error,
+  invalid,
+  submitting,
+}) => {
   return (
     <div>
       <Form
@@ -48,10 +58,21 @@ const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting }
             component={TextInput}
             placeholder="Password"
           />
-          {error && <Label basic color='red'>{error}</Label>}
-          <Button disabled={invalid || submitting}fluid size="large" color="teal">
+          {error && (
+            <Label basic color="red">
+              {error}
+            </Label>
+          )}
+          <Button
+            disabled={invalid || submitting}
+            fluid
+            size="large"
+            color="teal"
+          >
             Register
           </Button>
+          <Divider horizontal>Or</Divider>
+          <SocialLogin />
         </Segment>
       </Form>
     </div>

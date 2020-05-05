@@ -1,9 +1,13 @@
 import React from "react";
-import { Form, Segment, Button, Label } from "semantic-ui-react";
+import { Form, Segment, Button, Label, Divider } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
 import { login } from "../authActions";
 import TextInput from "../../../common/form/TextInput";
 import { connect } from "react-redux";
+
+// 15.14 bring in Divider from semantic ui and the social login component
+// also add the social component to registerForm
+import SocialLogin from '../SocialLogin/SocialLogin';
 
 const mapDispatchToProps = {
   login,
@@ -35,6 +39,10 @@ const LoginForm = ({ login, handleSubmit, error }) => {
         <Button fluid size="large" color="teal">
           Login
         </Button>
+        <Divider horizontal>
+          Or
+        </Divider>
+        <SocialLogin />
       </Segment>
     </Form>
   );
