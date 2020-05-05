@@ -54,6 +54,11 @@ export const registerUser = (user) => async (
       dispatch(closeModal());
   } catch (error) {
     console.log(error);
+    // 15.8 added the error Submission below
+    // head back to submission form
+    throw new SubmissionError({
+      _error: error.message,
+    });
   }
 };
 // 15.9 head over to the registerForm component

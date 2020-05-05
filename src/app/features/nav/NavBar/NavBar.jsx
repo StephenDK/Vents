@@ -32,6 +32,7 @@ class NavBar extends Component {
     this.props.openModal("RegisterModal");
   };
   // 15.7 to logout the user use the firebase logout method below
+  // 15.10 got to authActions for form error handling
   handleSignOut = () => {
     this.props.firebase.logout();
     this.props.history.push("/");
