@@ -8,10 +8,13 @@ import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
 import { reduxFirestore, getFirestore } from "redux-firestore";
 import firebase from "../config/firebase";
 
+// 15.16 updateProfileOnLogin stops the data base from rewritting the data 
+// everytime a user logs in.
 const rrfConfig = {
   userProfile: "users",
   attachAuthIsReady: true,
   useFirestoreForProfile: true,
+  updateProfileOnLogin: false
 };
 
 // Chanpter 12.0 Configuring Redux thunk

@@ -44,7 +44,7 @@ const LoginForm = ({ login, handleSubmit, error, socialLogin }) => {
           Or
         </Divider>
         {/* 15.15 we are passing social login to the social login component
-            head over to social login component
+            head over to social login component then the authActions for 15.16
         */}
         <SocialLogin socialLogin={socialLogin}/>
       </Segment>

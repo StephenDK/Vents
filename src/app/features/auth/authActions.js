@@ -67,15 +67,29 @@ export const registerUser = (user) => async (
 export const socialLogin = (selectedProvider) => async (
   dispatch,
   getState,
-  { getFirebase }
+  { getFirebase, getFirestore }
 ) => {
   const firebase = getFirebase();
+  const firestore = getFirestore();
   try {
     dispatch(closeModal());
-    await firebase.login({
+    const user = await firebase.login({
       provider: selectedProvider,
       type: "popup",
     });
+    //console.log(user);
+    // 15.15 There is no schema in firebase. The developer sets the schema
+    // firebase does not care if its supposed to be string or boolean
+    // the code below is if the user is firstTime. Uncomment console.log(user)
+    // 15.16 head over to the configureStore file
+    if (user.additionalUserInfo.isNewUser) {
+      await firestore.set(`users/${user.user.uid}`, {
+        displayName: user.profile.displayName,
+        photoURL: user.profile.avatarUrl,
+        createdAt: firestore.FieldValue.serverTimestamp()
+
+      })
+    }
   } catch (error) {
     console.log(error);
   }
