@@ -24,6 +24,7 @@ const validate = combineValidators({
 // and the label that will display the error if it exists
 // next adding other types of login
 // 15.13 head to SocialLogin/SocialLogin.jsx
+// 15.14 Facebook login for our app head to authActions
 
 const RegisterForm = ({
   handleSubmit,

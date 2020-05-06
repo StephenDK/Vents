@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Segment, Button, Label, Divider } from "semantic-ui-react";
 import { Field, reduxForm } from "redux-form";
-import { login } from "../authActions";
+import { login, socialLogin } from "../authActions";
 import TextInput from "../../../common/form/TextInput";
 import { connect } from "react-redux";
 
@@ -11,11 +11,12 @@ import SocialLogin from '../SocialLogin/SocialLogin';
 
 const mapDispatchToProps = {
   login,
+  socialLogin
 };
 
 // 15.3 since our form is already conect to redux-form bring in the error
 // property from redux form
-const LoginForm = ({ login, handleSubmit, error }) => {
+const LoginForm = ({ login, handleSubmit, error, socialLogin }) => {
   return (
     <Form size="large" onSubmit={handleSubmit(login)} autoComplete='off'>
       <Segment>
@@ -42,7 +43,10 @@ const LoginForm = ({ login, handleSubmit, error }) => {
         <Divider horizontal>
           Or
         </Divider>
-        <SocialLogin />
+        {/* 15.15 we are passing social login to the social login component
+            head over to social login component
+        */}
+        <SocialLogin socialLogin={socialLogin}/>
       </Segment>
     </Form>
   );

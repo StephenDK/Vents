@@ -1,11 +1,12 @@
 import React from "react";
 import { Button, Icon } from 'semantic-ui-react';
 
-const SocialLogin = () => {
+const SocialLogin = ({socialLogin}) => {
   return (
     <div>
       <Button
         type="button"
+        onClick={() => socialLogin('facebook')}
         style={{ marginBottom: "10px" }}
         fluid
         color="facebook"

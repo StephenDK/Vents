@@ -42,16 +42,16 @@ export const registerUser = (user) => async (
     let createdUser = await firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password);
-      console.log(createdUser);
-      await createdUser.user.updateProfile({
-        displayName: user.displayName
-      })
-      let newUser = {
-        displayName: user.displayName,
-        createdAt: firestore.FieldValue.serverTimestamp()
-      }
-      await firestore.set(`users/${createdUser.user.uid}`, {...newUser})
-      dispatch(closeModal());
+    console.log(createdUser);
+    await createdUser.user.updateProfile({
+      displayName: user.displayName,
+    });
+    let newUser = {
+      displayName: user.displayName,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    };
+    await firestore.set(`users/${createdUser.user.uid}`, { ...newUser });
+    dispatch(closeModal());
   } catch (error) {
     console.log(error);
     // 15.8 added the error Submission below
@@ -62,3 +62,22 @@ export const registerUser = (user) => async (
   }
 };
 // 15.9 head over to the registerForm component
+
+// 15.14 This new method is for logging a user in with facebook
+export const socialLogin = (selectedProvider) => async (
+  dispatch,
+  getState,
+  { getFirebase }
+) => {
+  const firebase = getFirebase();
+  try {
+    dispatch(closeModal());
+    await firebase.login({
+      provider: selectedProvider,
+      type: "popup",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+// now head to LoginForm to hook up method
