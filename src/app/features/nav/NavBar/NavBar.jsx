@@ -20,7 +20,9 @@ const mapDispatchToProps = {
 // after importing withFirebase we must connect this component to the withFirebase HOC
 const mapStateToProps = (state) => ({
   //auth: state.auth,
-  auth: state.firebase.auth
+  // 15.17 btiong in the profile from the store and pass it to ur signed in menu
+  auth: state.firebase.auth,
+  profile: state.firebase.profile
 });
 
 class NavBar extends Component {
@@ -39,7 +41,7 @@ class NavBar extends Component {
   };
 
   render() {
-    const { auth } = this.props;
+    const { auth, profile } = this.props;
     // 15.5 below is our check to make sure we are authenticated
     const authenticated = auth.isLoaded && !auth.isEmpty;
     return (
@@ -70,7 +72,8 @@ class NavBar extends Component {
             <SignedInMenu
             // 15.6 Head to signed in menu
               signOut={this.handleSignOut}
-              auth={auth}
+            // 15.18 finish displaying name in isgned in menu
+              profile={profile}
             />
           ) : (
             <SignedOutMenu

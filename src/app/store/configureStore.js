@@ -10,6 +10,7 @@ import firebase from "../config/firebase";
 
 // 15.16 updateProfileOnLogin stops the data base from rewritting the data 
 // everytime a user logs in.
+// 15.17 display UserName on nav head to NAVBAR.js
 const rrfConfig = {
   userProfile: "users",
   attachAuthIsReady: true,
