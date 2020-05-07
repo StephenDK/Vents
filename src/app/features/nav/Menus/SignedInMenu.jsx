@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 // and displaying their email below
 // head back to navbar
 // Head over to authactions for 15.8
+// 15.19 Start work on the account page. head to AccountPage.jsx
 const SignedInMenu = ({signOut, profile}) => {
   return (
     <Menu.Item position="right">
