@@ -1,8 +1,9 @@
 // 15.1 displaying firebase login errors to user
 // import SubmissionError from redux form
-import { SubmissionError } from "redux-form";
+import { SubmissionError, reset } from "redux-form";
 
 import { closeModal } from "../modals/modalActions";
+import { toastr } from "react-redux-toastr";
 
 export const login = (creds) => {
   // 15.0 Firebase login setup.
@@ -95,3 +96,25 @@ export const socialLogin = (selectedProvider) => async (
   }
 };
 // now head to LoginForm to hook up method
+
+
+// 15.21 this is the action for the account page submit button
+// to reset the form we import reset from redux-form
+// now we have to get our method into our accout page
+// instead of connecting everycomponent to the store we can
+// connect the settings dashboard to the store and pass these
+// methods down to our components. Head to settingsDashboard
+export const updatePassword = (creds) => 
+  async (dispatch, getState, {getFirebase}) => {
+    const firebase = getFirebase();
+    const user = firebase.auth().currentUser;
+    try {
+      await user.updatePassword(creds.newPassword1);
+      await(dispatch(reset('account')));
+      toastr.success('Success', 'Your password has been updated');
+    } catch (error) {
+      throw new SubmissionError({
+        _error: error.message
+      })
+    }
+  }

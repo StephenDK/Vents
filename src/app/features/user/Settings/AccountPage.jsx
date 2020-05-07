@@ -30,14 +30,16 @@ const validate = combineValidators({
 });
 // 15.20 now pass validate as an argument in redux form
 // then disable the button if the form is inValid
-const AccountPage = ({ error, invalid, submitting }) => {
+// now we have to hookup the submit button to an action
+// 12.21 head to authActions
+const AccountPage = ({ error, invalid, submitting, handleSubmit, updatePassword }) => {
   return (
     <Segment>
       <Header dividing size="large" content="Account" />
       <div>
         <Header color="teal" sub content="Change password" />
         <p>Use this form to update your account settings</p>
-        <Form>
+        <Form onSubmit={handleSubmit(updatePassword)}>
           <Field
             width={8}
             name="newPassword1"
