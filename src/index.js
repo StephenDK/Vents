@@ -64,6 +64,8 @@ if (module.hot) {
 store.firebaseAuthIsReady.then(() => {
   render();
 })
+// 16.0 We are starting the User Management
+// head to BasicPage.jsx
 
 
 // If you want your app to work offline and load faster, you can change
