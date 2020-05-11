@@ -34,7 +34,14 @@ const SettingsDashboard = ({ updatePassword, providerId, user, updateProfile }) 
             path="/settings/basic"
             render={() => <BasicPage initialValues={user} updateProfile={updateProfile}/>}
           />
-          <Route path="/settings/about" component={AboutPage} />
+          <Route 
+            path="/settings/about" 
+            // 16.16 to pass in the initial values from or redux form state
+            // we must pass the component in a render method with initialValues property
+            // and the updateProfile action to update the user information
+            // head back to the aboutPage and hook up the form
+            render={() => <AboutPage initialValues={user} updateProfile={updateProfile}/>}
+          />
           <Route path="/settings/photos" component={PhotosPage} />
           <Route
             path="/settings/account"

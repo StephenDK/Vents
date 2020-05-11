@@ -20,6 +20,8 @@ import { addYears } from "date-fns";
 // 16.12 This form below is hooked up to redux forms
 // so it has a handleSubmit method. Pass the updateProfile
 // into the handleSubmit 
+// 16.13 next we fixe the date picker method
+// head to common/form/dateInput
 
 class BasicPage extends Component {
   render() {
@@ -87,6 +89,8 @@ class BasicPage extends Component {
 // we must enable enableReinitialize : true in conecting this component to
 // redux form
 // 16.6 now lets create the radio buttons for gender. Head to Form folder/RadioInput.jsx
-export default reduxForm({ form: "userProfile", enableReinitialize: true })(
-  BasicPage
-);
+export default reduxForm({ 
+  form: "userProfile", 
+  enableReinitialize: true, 
+  destroyOnUnmount: false 
+})(BasicPage);
