@@ -13,6 +13,8 @@ import RadioInput from "../../../common/form/RadioInput";
 
 // 16.9 Date picker setup
 // import addYears
+// 16.10 now lets create the action that will handle the form below
+// head to userActions.js
 import { addYears } from "date-fns";
 
 class BasicPage extends Component {
