@@ -8,9 +8,11 @@ import BasicPage from "./BasicPage";
 import AboutPage from "./AboutPage";
 import PhotosPage from "./PhotosPage";
 import AccountPage from "./AccountPage";
+import { updateProfile } from '../userActions.js'
 
 const mapDispatchToProps = {
   updatePassword,
+  updateProfile
 };
 
 //16.3 bring in the user data from our state in store
@@ -21,7 +23,7 @@ const mapStateToProps = (state) => ({
   user: state.firebase.profile,
 });
 
-const SettingsDashboard = ({ updatePassword, providerId, user }) => {
+const SettingsDashboard = ({ updatePassword, providerId, user, updateProfile }) => {
   return (
     <Grid>
       <Grid.Column width={12}>
@@ -30,7 +32,7 @@ const SettingsDashboard = ({ updatePassword, providerId, user }) => {
           {/* 16.4 Because BasicPage is a redux form we need to pass user as initialValues */}
           <Route
             path="/settings/basic"
-            render={() => <BasicPage initialValues={user} />}
+            render={() => <BasicPage initialValues={user} updateProfile={updateProfile}/>}
           />
           <Route path="/settings/about" component={AboutPage} />
           <Route path="/settings/photos" component={PhotosPage} />

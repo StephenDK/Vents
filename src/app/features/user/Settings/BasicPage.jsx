@@ -17,13 +17,17 @@ import RadioInput from "../../../common/form/RadioInput";
 // head to userActions.js
 import { addYears } from "date-fns";
 
+// 16.12 This form below is hooked up to redux forms
+// so it has a handleSubmit method. Pass the updateProfile
+// into the handleSubmit 
+
 class BasicPage extends Component {
   render() {
-    const { pristine, submitting } = this.props;
+    const { pristine, submitting, handleSubmit, updateProfile } = this.props;
     return (
       <Segment>
         <Header dividing size="large" content="Basics" />
-        <Form>
+        <Form onSubmit={handleSubmit(updateProfile)}>
           <Field
             width={8}
             name="displayName"
@@ -48,15 +52,15 @@ class BasicPage extends Component {
               component={RadioInput}
             />
           </Form.Group>
-          <Field
+          <Field 
             width={8}
-            name="dateOfBirth"
+            name='dateOfBirth'
             component={DateInput}
-            placeholder="Date of Birth"
-            dateFormat="dd LL yyyy"
+            placeholder='Date of Birth'
+            dateFormat='dd LL yyyy'
             showYearDropdown={true}
             showMonthDropdown={true}
-            dropdownMode="select"
+            dropdownMode='select'
             maxDate={addYears(new Date(), -18)}
           />
           <Field
