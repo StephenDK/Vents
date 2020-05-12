@@ -81,6 +81,8 @@ const AboutPage = ({ pristine, submitting, handleSubmit, updateProfile }) => {
 // so when we switch between other components the data wont persist
 // back into the form fields. The destroyOnUnmount set to false preserves 
 // the form values. Add to the basic page as well
+// 17.00 begins with setting up the firebase database with a storage bucket
+// head over to config/firebase.js
 export default reduxForm({ 
     form: 'userProfile', 
     enableReinitialize: true, 
