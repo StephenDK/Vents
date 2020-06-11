@@ -28,6 +28,9 @@ class CropperInput extends Component {
                 ref={this.cropper}
                 src={imagePreview}
                 style={{ height: 200, width: '100%' }}
+                // What is pretty unique is that the preview attribute below
+                // looks for an element with the class of img-preview
+                // that is what it hooks onto to display the preview image
                 preview='.img-preview'
                 // 17.13 We have to add another peice of state to hold the newly cropped image
                 // head over to the imagepage.jsx

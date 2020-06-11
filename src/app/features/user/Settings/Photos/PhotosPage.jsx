@@ -20,6 +20,8 @@ const PhotosPage = () => {
     //17.14 we can save the new cropped image into this state and we can pass down
     // the image preview in files state and the setImage into cropperInput component
     const [image, setImage] = useState(null);
+    // 17.15 now we are going to create the button and methods to submit the 
+    // cropped image. head to userActions.js
 
     // 17.11 below cleans up the objectURL saved in memory
     // because we are using a hook we have to specify our dependencies
