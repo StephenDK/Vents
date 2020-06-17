@@ -4,7 +4,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 // 17.10 we need one more hook called useEffect. What ever we pass to use effect 
 // will run after the jsx is returned to be rendered to the screen
-import { Image, Segment, Header, Divider, Grid, Button, Card } from 'semantic-ui-react';
+import { Segment, Header, Divider, Grid, Button } from 'semantic-ui-react';
 import DropzoneInput from './DropzoneInput';
 import CropperInput from './CropperInput';
 
@@ -18,6 +18,7 @@ import { toastr } from 'react-redux-toastr';
 // check to bottom of the page to see configuration.
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import UserPhotos from './UserPhotos';
 
 const mapDispatchToProps = {
     uploadProfileImage
@@ -27,15 +28,20 @@ const mapDispatchToProps = {
 // to the user profile image and the auth
 const mapStateToProps = (state) => ({
     auth: state.firebase.auth,
-    profile: state.firebase.profile
+    profile: state.firebase.profile,
+    photos: state.firestore.ordered.photos
 })
-
-const query = ({auth}) => {
+// 17.20 Query gets the photo url from firestore
+// everything is hooked up at the bottom of this page 
+// where connect the component to redux store
+// now that this component has access to the store where we hold our images
+// Wen can now display them for the user. Create UserPhotos.jsx component
+const query = ({ auth }) => {
     return [
         {
             collection: 'users',
             doc: auth.uid,
-            subcollections: [{ collection: 'photos'}],
+            subcollections: [{ collection: 'photos' }],
             storeAs: 'photos'
         }
     ]
@@ -43,7 +49,7 @@ const query = ({auth}) => {
 
 // 17.6 we are going to convert this compone to a normal functional component
 // so we can use react hooks
-const PhotosPage = ({ uploadProfileImage }) => {
+const PhotosPage = ({ uploadProfileImage, photos, profile }) => {
     // 17.7 below is how we use the setState react hook. We are setting the state
     // to an empty array. The state is called files and the setStae method is called
     // setFiles. Next pass the setFiles method into our DropzoneInput component
@@ -121,26 +127,9 @@ const PhotosPage = ({ uploadProfileImage }) => {
                 </Grid.Column>
 
             </Grid>
-
+                <UserPhotos photos={photos} profile={profile}/>
             <Divider />
-            <Header sub color='teal' content='All Photos' />
 
-            <Card.Group itemsPerRow={5}>
-                <Card>
-                    <Image src='https://randomuser.me/api/portraits/men/20.jpg' />
-                    <Button positive>Main Photo</Button>
-                </Card>
-
-                <Card >
-                    <Image
-                        src='https://randomuser.me/api/portraits/men/20.jpg'
-                    />
-                    <div className='ui two buttons'>
-                        <Button basic color='green'>Main</Button>
-                        <Button basic icon='trash' color='red' />
-                    </div>
-                </Card>
-            </Card.Group>
         </Segment>
     );
 }
