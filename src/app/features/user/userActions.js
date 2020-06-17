@@ -40,7 +40,7 @@ export const uploadProfileImage = (file, fileName) =>
             // get the url of the image
             let downloadURL = await uploadedFile.uploadTaskSnapshot.ref.getDownloadURL();
             // get the user document from firestore
-            let userDoc = await firestore.get(`users/${user.id}`);
+            let userDoc = await firestore.get(`users/${user.uid}`);
             // check if the user has a photo ? null : update profile image
             if (!userDoc.data().photoURL) {
                 await firebase.updateProfile({
@@ -51,7 +51,7 @@ export const uploadProfileImage = (file, fileName) =>
                 })
             }
             await firestore.add({
-                collection: 'user',
+                collection: 'users',
                 doc: user.uid,
                 subcollections: [{ collection: 'photos' }]
             }, {
@@ -64,3 +64,5 @@ export const uploadProfileImage = (file, fileName) =>
             dispatch(asyncActionError());
         }
     }
+// 17.16 now that the photo submit method is setup, import the method 
+// into our component and attach it to a button. Head to PhotosPage.jsx
