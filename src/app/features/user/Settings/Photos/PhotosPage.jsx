@@ -10,7 +10,7 @@ import CropperInput from './CropperInput';
 
 // 17.17 now import the redux connect method to hook up the submitphoto method
 import { connect } from 'react-redux'
-import { uploadProfileImage } from '../../userActions';
+import { uploadProfileImage, deletePhoto } from '../../userActions';
 import { toastr } from 'react-redux-toastr';
 
 // 17.19 import firestoreConnect to connect this component to the firestore
@@ -21,7 +21,8 @@ import { compose } from 'redux';
 import UserPhotos from './UserPhotos';
 
 const mapDispatchToProps = {
-    uploadProfileImage
+    uploadProfileImage,
+    deletePhoto
 }
 
 // 17.20 get the redux state from our store so we can have access
@@ -49,7 +50,7 @@ const query = ({ auth }) => {
 
 // 17.6 we are going to convert this compone to a normal functional component
 // so we can use react hooks
-const PhotosPage = ({ uploadProfileImage, photos, profile }) => {
+const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto }) => {
     // 17.7 below is how we use the setState react hook. We are setting the state
     // to an empty array. The state is called files and the setStae method is called
     // setFiles. Next pass the setFiles method into our DropzoneInput component
@@ -86,6 +87,19 @@ const PhotosPage = ({ uploadProfileImage, photos, profile }) => {
         setFiles([]);
         setImage(null);
     }
+
+    // 17.25 now we are going to write a handle method to delete a photo
+    // once we import deltePhoto method and hook it up to the mapDispatchToProps
+    // we can pass it into UserPhotos component 
+    const handleDeletePhoto = async (photo) => {
+        try {
+            await deletePhoto(photo)
+        }
+        catch (error) {
+            toastr.error('Ooops', error.message)
+        }
+    }
+
 
     return (
         <Segment>
@@ -127,7 +141,10 @@ const PhotosPage = ({ uploadProfileImage, photos, profile }) => {
                 </Grid.Column>
 
             </Grid>
-                <UserPhotos photos={photos} profile={profile}/>
+            {/* 17.26 After we pass deletePhoto method head to UserPhotos
+                to hook up the new method
+            */}
+            <UserPhotos photos={photos} profile={profile} deletePhoto={handleDeletePhoto} />
             <Divider />
 
         </Segment>

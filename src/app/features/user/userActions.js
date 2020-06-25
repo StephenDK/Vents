@@ -1,5 +1,7 @@
 import { toastr } from "react-redux-toastr";
 import { asyncActionStart, asyncActionFinished, asyncActionError } from "../async/asyncActions";
+import cuid from 'cuid';
+
 
 // 16.10 this file will contain the action for a user to update 
 // their profile
@@ -26,12 +28,15 @@ export const updateProfile = (user) =>
 // 17.15 this is the method to upload the cropped phot picked by the user
 export const uploadProfileImage = (file, fileName) =>
     async (dispatch, getState, { getFirebase, getFirestore }) => {
+        // 17.22 We are going to append a unique id to the filename of the photo
+        // so instead of usinf fileName below we will be using cuid which we must import
+        const imageName = cuid();
         const firebase = getFirebase();
         const firestore = getFirestore();
         const user = firebase.auth().currentUser;
         const path = `${user.uid}/user_images`;
         const options = {
-            name: fileName
+            name: imageName
         };
         try {
             dispatch(asyncActionStart());
@@ -55,7 +60,7 @@ export const uploadProfileImage = (file, fileName) =>
                 doc: user.uid,
                 subcollections: [{ collection: 'photos' }]
             }, {
-                name: fileName,
+                name: imageName,
                 url: downloadURL
             })
             dispatch(asyncActionFinished());
@@ -66,3 +71,26 @@ export const uploadProfileImage = (file, fileName) =>
     }
 // 17.16 now that the photo submit method is setup, import the method 
 // into our component and attach it to a button. Head to PhotosPage.jsx
+
+
+// 17.23 This will be the action to delete a photo
+export const deletePhoto = (photo) => 
+    async (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const user = firebase.auth().currentUser;
+        try {
+            await firebase.deleteFile(`${user.uid}/user_images/${photo.name}`);
+            await firestore.delete({
+                collection: 'users',
+                doc: user.uid,
+                subcollections: [{collection: 'photos', doc: photo.id}]
+            })
+        }
+        catch (error) {
+            console.log(error);
+            throw new Error('Problem deleting the photo');
+        }
+    }
+// 17.24 now head over to the PhotosPage.jsx and import the action 
+// into the mapDispatchToProps
