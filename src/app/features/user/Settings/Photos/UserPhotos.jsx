@@ -31,6 +31,9 @@ const UserPhotos = ({ photos, profile }) => {
     )
 }
 
+// 17.21 Now we have to fix the problem of users uplaoding images 
+// with the same name. When this happends firebase writes over the 
+// image with the same name. Head over to userActions.js to fix the problem
 
 
 export default UserPhotos
