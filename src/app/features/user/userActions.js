@@ -94,3 +94,20 @@ export const deletePhoto = (photo) =>
     }
 // 17.24 now head over to the PhotosPage.jsx and import the action 
 // into the mapDispatchToProps
+
+// 17.28 this is the method that allows the user to choose the main photo
+export const setMainPhoto = (photo) => 
+async (dispatch, getState, { getFirebase }) => {
+    const firebase = getFirebase();
+    try {
+        return await firebase.updateProfile({
+            photoURL: photo.url
+        })
+    }
+    catch (error) {
+        console.log(error);
+        throw new Error('Problem setting main photo');
+    }
+}
+// now import the method inside the photosPage.jsx and then pass it down 
+// into the UserPhotos.jsx component

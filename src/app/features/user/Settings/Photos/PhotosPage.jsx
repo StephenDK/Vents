@@ -10,7 +10,7 @@ import CropperInput from './CropperInput';
 
 // 17.17 now import the redux connect method to hook up the submitphoto method
 import { connect } from 'react-redux'
-import { uploadProfileImage, deletePhoto } from '../../userActions';
+import { uploadProfileImage, deletePhoto, setMainPhoto } from '../../userActions';
 import { toastr } from 'react-redux-toastr';
 
 // 17.19 import firestoreConnect to connect this component to the firestore
@@ -22,7 +22,8 @@ import UserPhotos from './UserPhotos';
 
 const mapDispatchToProps = {
     uploadProfileImage,
-    deletePhoto
+    deletePhoto,
+    setMainPhoto
 }
 
 // 17.20 get the redux state from our store so we can have access
@@ -30,7 +31,8 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => ({
     auth: state.firebase.auth,
     profile: state.firebase.profile,
-    photos: state.firestore.ordered.photos
+    photos: state.firestore.ordered.photos,
+    loading: state.async.loading
 })
 // 17.20 Query gets the photo url from firestore
 // everything is hooked up at the bottom of this page 
@@ -50,7 +52,7 @@ const query = ({ auth }) => {
 
 // 17.6 we are going to convert this compone to a normal functional component
 // so we can use react hooks
-const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto }) => {
+const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto, setMainPhoto, loading }) => {
     // 17.7 below is how we use the setState react hook. We are setting the state
     // to an empty array. The state is called files and the setStae method is called
     // setFiles. Next pass the setFiles method into our DropzoneInput component
@@ -100,6 +102,14 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto }) => {
         }
     }
 
+    const handleSetMainPhoto = async (photo) => {
+        try {
+            await setMainPhoto(photo);
+        }
+        catch (error) {
+            toastr.error('Oops', error.message)
+        }
+    }
 
     return (
         <Segment>
@@ -127,8 +137,18 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto }) => {
                                 style={{ minHeight: '200px', minWidth: '200px', overflow: 'hidden' }}
                             />
                             <Button.Group>
-                                <Button onClick={handleUploadImage} style={{ width: '100px' }} positive icon='check' />
-                                <Button onClick={handleCancelCrop} style={{ width: '100px' }} icon='close' />
+                                <Button 
+                                    loading={loading}
+                                    onClick={handleUploadImage} 
+                                    style={{ width: '100px' }} 
+                                    positive 
+                                    icon='check' 
+                                />
+                                <Button 
+                                    disabled={loading}
+                                    onClick={handleCancelCrop} 
+                                    style={{ width: '100px' }} 
+                                    icon='close' />
                                 {/* 17.18 After testing the uploadPhoto method using the debugger in vs Code
                                     Check video #153
                                     Lets work on getting the uploaded photos to appear on the photos page
@@ -144,7 +164,12 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto }) => {
             {/* 17.26 After we pass deletePhoto method head to UserPhotos
                 to hook up the new method
             */}
-            <UserPhotos photos={photos} profile={profile} deletePhoto={handleDeletePhoto} />
+            <UserPhotos 
+                photos={photos} 
+                profile={profile} 
+                deletePhoto={handleDeletePhoto} 
+                setMainPhoto={handleSetMainPhoto} 
+            />
             <Divider />
 
         </Segment>

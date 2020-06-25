@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Header, Card, Image, Button } from 'semantic-ui-react';
 
-const UserPhotos = ({ photos, profile, deletePhoto }) => {
+const UserPhotos = ({ photos, profile, deletePhoto, setMainPhoto }) => {
     let filteredPhotos;
     if (photos) {
         filteredPhotos = photos.filter(photo => {
@@ -14,14 +14,18 @@ const UserPhotos = ({ photos, profile, deletePhoto }) => {
 
             <Card.Group itemsPerRow={5}>
                 <Card>
-                    <Image src={profile.photoURL} />
+                    <Image src={profile.photoURL || '/assets/user.png'} />
                     <Button positive>Main Photo</Button>
                 </Card>
                 {photos && filteredPhotos.map(photo => (
                     <Card key={photo.id}>
                         <Image src={photo.url} />
                         <div className='ui two buttons'>
-                            <Button basic color='green'>Main</Button>
+                            <Button onClick={() => setMainPhoto(photo)} basic color='green'>Main</Button>
+                            {/* 17.27 Now that we have to deletePhoto method hooked up
+                                we will go and setup the Main button to let the user select their 
+                                main photo. Head over to userActions.js
+                            */}
                             <Button onClick={() => deletePhoto(photo)} basic icon='trash' color='red' />
                         </div>
                     </Card>
