@@ -35,7 +35,10 @@ export const createEvent = (event) => {
         eventDate: event.date,
         host: true
       })
+      // 18.3 now that we have our data the way we want it lets head
+      // over to the eventForm.jsx component on hook this method up.
       toastr.success("Success!", "Event has been created");
+      return createdEvent;
     } catch (error) {
       toastr.error("Oops", "Something went wrong");
     }

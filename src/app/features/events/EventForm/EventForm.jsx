@@ -3,28 +3,13 @@ import React, { Component } from "react";
 import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { createEvent, updateEvent } from "../eventActions";
-import cuid from "cuid";
+// import cuid from "cuid";
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-
-// 9.1 import reduxForm and Field. reduxForm is a HOC and
-// we must pass our form into
 import { reduxForm, Field } from "redux-form";
-// 9.8 continued... import new text field component and pass into
-// redux field component. We can replace all text fields with new component
-// 9.9 description component found in common/form/TextArea.jsx
 import TextInput from "../../../common/form/TextInput";
-
-//9.10 Import the TextArea and pass into description field component
-// 9.11 Category Component found in common/form/SelectInput.jsx
 import TextArea from "../../../common/form/TextArea";
-
-//9.13 import SelectInput component and pass into category field
 import SelectInput from "../../../common/form/SelectInput";
-
-// 9.17 import DateInput component and add date to validator
 import DateInput from "../../../common/form/DateInput";
-
-// 9.14 Import of revalidate from helper functions
 import {
   combineValidators,
   composeValidators,
@@ -32,6 +17,7 @@ import {
   hasLengthGreaterThan,
 } from "revalidate";
 import PlaceInput from "../../../common/form/PlaceInput";
+
 
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see
@@ -50,8 +36,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-//9.13 these are the categories we are going to use in the selectInput component
-// pass as options
+
 const mapDispatchToProps = {
   createEvent,
   updateEvent,
@@ -66,10 +51,7 @@ const category = [
   { key: "travel", text: "Travel", value: "travel" },
 ];
 
-// 9.14 Revalidate form validation setup
-// first import combine validators and validate helper functions from revalidate
-// below is how you validate each form field with a return message if error
-// Now we have to pass validate into our redux form config function at the bottom
+
 const validate = combineValidators({
   title: isRequired({ message: "The event title is required" }),
   category: isRequired({ message: "The category is required" }),
@@ -87,27 +69,26 @@ const validate = combineValidators({
 class EventForm extends Component {
   state = {
     cityLatLng: {},
-    venueLatLng: {} 
+    venueLatLng: {}
   }
 
-
-  onFormSubmit = (values) => {
-    //console.log(values);
-    values.venueLatLng = this.state.venueLatLng;
+// 18.4 we are now setting up this method for submitting the event to firebase
+onFormSubmit = async (values) => {
+  //console.log(values);
+  values.venueLatLng = this.state.venueLatLng;
+  try {
     if (this.props.initialValues.id) {
       this.props.updateEvent(values);
       this.props.history.push(`/events/${this.props.initialValues.id}`);
     } else {
-      const newEvent = {
-        ...values,
-        id: cuid(),
-        hostPhotoURL: "/assets/user.png",
-        hostedBy: "Bob",
-      };
-      this.props.createEvent(newEvent);
-      this.props.history.push(`/events/${newEvent.id}`);
+      let createdEvent = await this.props.createEvent(values);
+      this.props.history.push(`/events/${createdEvent.id}`);
     }
-  };
+  }
+  catch (error) {
+    console.log(error);
+  }
+};
 
   handleCitySelect = (selectedCity) => {
     geocodeByAddress(selectedCity)
@@ -179,7 +160,7 @@ class EventForm extends Component {
               <Field
                 name="city"
                 component={PlaceInput}
-                options={{types: ['(cities)']}}
+                options={{ types: ['(cities)'] }}
                 onSelect={this.handleCitySelect}
                 placeholder="Event city"
               />
