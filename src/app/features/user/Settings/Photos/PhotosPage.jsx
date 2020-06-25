@@ -146,6 +146,8 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, deletePhoto, setMainP
                                 />
                                 <Button 
                                     disabled={loading}
+                                    // We are done with chapter 17. Now head to features/event/eventActions.js
+                                    // for the start of chapter 18
                                     onClick={handleCancelCrop} 
                                     style={{ width: '100px' }} 
                                     icon='close' />

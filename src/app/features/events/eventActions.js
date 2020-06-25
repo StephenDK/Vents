@@ -1,5 +1,3 @@
-// CH 8 Step 2: Action Creators that return actions
-
 import {
   CREATE_EVENT,
   UPDATE_EVENT,
@@ -13,19 +11,30 @@ import {
 } from "../async/asyncActions";
 import { fetchSampleData } from "../../data/mockApi";
 import { toastr } from "react-redux-toastr";
+import { createNewEvent } from "../../common/util/helpers";
 
-// 13.4 we are going to add redux toastr to creating and updating events actions
-// instead of using a single dispatch we must use dispatch() to send multiple events
+
+// 18.1 we are now going to setup the createEvent action to use firestore
 export const createEvent = (event) => {
-  // We are passing in the event
-  return async (dispatch) => {
+  return async (dispatch, getState, { getFirestore, getFirebase }) => {
+    // get firestore and firebase  instance
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    // Get the user's id
+    const user = firestore.auth().currentUser;
+    const photoURL = getState().firebase.profile.photoURL;
+    // 18.2 we are going to create a helper function to shape the event data 
+    // and return an event object so we can submit the data to firestore
+    // head to common/util/helper.js
+    const newEvent = createNewEvent(user, photoURL, event)
     try {
-      dispatch({
-        type: CREATE_EVENT,
-        payload: {
-          event,
-        },
-      });
+      let createdEvent = await firestore.add('events', newEvent);
+      await firestore.set(`event_attendee/${createdEvent.id}_${user.uid}`, {
+        eventId: createdEvent.id,
+        userUid: user.uid,
+        eventDate: event.date,
+        host: true
+      })
       toastr.success("Success!", "Event has been created");
     } catch (error) {
       toastr.error("Oops", "Something went wrong");
@@ -48,8 +57,8 @@ export const updateEvent = (event) => {
     }
   };
 };
-// action creator for deleting an event
-// passing in event id
+
+
 export const deleteEvent = (eventId) => {
   return {
     type: DELETE_EVENT,
@@ -59,7 +68,6 @@ export const deleteEvent = (eventId) => {
   };
 };
 
-// 12.21 new action creater to fetch the events
 export const loadEvents = () => {
   return async (dispatch) => {
     try {
@@ -74,5 +82,3 @@ export const loadEvents = () => {
     }
   };
 };
-// 12.22 now we need a reducer to take the dispatched events and
-// save them into the store. head to eventReducer
