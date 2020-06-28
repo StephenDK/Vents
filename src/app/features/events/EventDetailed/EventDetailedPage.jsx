@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { Component }from 'react'
 import { connect } from 'react-redux';
 import { Grid } from 'semantic-ui-react'
 import EventDetailedHeader from './EventDetailedHeader'
 import EventDetailedInfo from './EventDetailedInfo'
 import EventDetailedChat from './EventDetailedChat'
 import EventDetailedSidebar from './EventDetailedSidebar'
+import { withFirestore } from 'react-redux-firebase';
+import { toastr } from 'react-redux-toastr';
 
 
 // Since this component is wraped in router we can access the 
@@ -13,14 +15,14 @@ const mapStateToProps = (state, ownProps) => {
     // We grab the /:id from the url and save to eventId 
     const eventId = ownProps.match.params.id;
 
-    // Createempty object to store event
+    // Create empty object to store event
     let event = {};
 
     // if there is an id in params and events array is great than zero
-    if (eventId && state.events.length > 0) {
+    if (state.firestore.ordered.events && state.firestore.ordered.events.length > 0) {
         // filter events in redux state and set empty event object to
         // the event that matches the param id
-        event = state.events.filter(event => event.id === eventId)[0];
+        event = state.firestore.ordered.events.filter(event => event.id === eventId)[0];
     }
     // return event object with matching id as param
     return {
@@ -28,20 +30,42 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
                     // Pull event from this.props
-const EventDetailedPage = ({event}) => {
-    return (
-        <Grid>
-            <Grid.Column width={10}>
-                <EventDetailedHeader event={event} />
-                <EventDetailedInfo event={event} />
-                <EventDetailedChat />
-            </Grid.Column>
-            <Grid.Column width={6}>
-                <EventDetailedSidebar attendees={event.attendees} />
-            </Grid.Column>
-        </Grid>
-    )
+class EventDetailedPage extends Component {
+
+    // 18.5 First we need to change this component to a class based.
+    // Then we must inport withFirestore and export this component connected
+    // to firestore. Once our compnent is connected ti firestore
+    // we can access through the props the data for our event detail
+    // each snapshot of data from firebase comes with exists: true || false
+    // make a check for if data exists
+    async componentDidMount() {
+        const {firestore, match, history} = this.props;
+        let event = await firestore.get(`events/${match.params.id}`);
+        // console.log(match);
+        // console.log(event);
+        if (!event.exists) {
+            history.push('/events');
+            toastr.error('Sorry', 'Event not found');
+        }
+    }
+
+    render() {
+        const {event} = this.props;
+
+        return (
+            <Grid>
+                <Grid.Column width={10}>
+                    <EventDetailedHeader event={event} />
+                    <EventDetailedInfo event={event} />
+                    <EventDetailedChat />
+                </Grid.Column>
+                <Grid.Column width={6}>
+                    <EventDetailedSidebar attendees={event.attendees} />
+                </Grid.Column>
+            </Grid>
+        )
+    }    
 }
 
 //connect component to store that filterd the event
-export default connect(mapStateToProps)(EventDetailedPage);
+export default withFirestore(connect(mapStateToProps)(EventDetailedPage));

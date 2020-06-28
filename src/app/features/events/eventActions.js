@@ -1,5 +1,5 @@
 import {
-  CREATE_EVENT,
+  //CREATE_EVENT,
   UPDATE_EVENT,
   DELETE_EVENT,
   FETCH_EVENTS,
@@ -19,7 +19,7 @@ export const createEvent = (event) => {
   return async (dispatch, getState, { getFirestore, getFirebase }) => {
     // get firestore and firebase  instance
     const firestore = getFirestore();
-    const firebase = getFirebase();
+    //const firebase = getFirebase();
     // Get the user's id
     const user = firestore.auth().currentUser;
     const photoURL = getState().firebase.profile.photoURL;

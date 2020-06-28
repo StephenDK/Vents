@@ -72,7 +72,9 @@ class EventForm extends Component {
     venueLatLng: {}
   }
 
-// 18.4 we are now setting up this method for submitting the event to firebase
+// 18.4 we are now setting up this method for submitting the event to firebase.
+// once we have connected the form to submit to firebase and it works
+// lets head over to eventDetailed.jsx to display the event data
 onFormSubmit = async (values) => {
   //console.log(values);
   values.venueLatLng = this.state.venueLatLng;
@@ -134,11 +136,6 @@ onFormSubmit = async (values) => {
               onSubmit={this.props.handleSubmit(this.onFormSubmit)}
               autoComplete="off"
             >
-              {/* 9.3 We can now start replacing the form fields with 
-                    redux Field tag imported above. Instead of using the input component
-                    we can create our own component with semantic ui styles and pass it in.
-                    9.4 in common/form/TextInput.jsx
-                */}
               <Field
                 name="title"
                 component={TextInput}
