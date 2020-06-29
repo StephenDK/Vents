@@ -8,6 +8,7 @@ import EventDetailedSidebar from './EventDetailedSidebar'
 import { withFirestore } from 'react-redux-firebase';
 import { toastr } from 'react-redux-toastr';
 
+import { objectToArray } from '../../../common/util/helpers';
 
 // Since this component is wraped in router we can access the 
 //method from router and pass it into mapStateToProps as ownProps
@@ -51,7 +52,10 @@ class EventDetailedPage extends Component {
 
     render() {
         const {event} = this.props;
-
+        // 18.9 we are now going to setup our helper function so that attendees
+        // does not throw an error for being a firebase object after we 
+        // use our helper function and turn it into an array
+        const attendees = event && event.attendees && objectToArray(event.attendees);
         return (
             <Grid>
                 <Grid.Column width={10}>
@@ -60,7 +64,7 @@ class EventDetailedPage extends Component {
                     <EventDetailedChat />
                 </Grid.Column>
                 <Grid.Column width={6}>
-                    <EventDetailedSidebar attendees={event.attendees} />
+                    <EventDetailedSidebar attendees={attendees} />
                 </Grid.Column>
             </Grid>
         )

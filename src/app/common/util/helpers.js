@@ -1,3 +1,15 @@
+// 18.8 the helper function below takes an object and puts it into an array
+// now we need to uses this helper function
+// go to EventDetailedPage.jsx
+export const objectToArray = (object) => {
+    if (object) {
+        return Object.entries(object).map(e => Object.assign({}, e[1], {id: e[0]}))
+    }
+}
+
+
+
+
 export const createNewEvent = (user, photoURL, event) => {
     return {
         ...event,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Segment, Image, Item, Button, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import {format, parseISO} from 'date-fns';
+import {format} from 'date-fns';
 
 // Styles
 const eventImageStyle = {
@@ -36,7 +36,15 @@ const EventDetailedHeader = ({ event }) => {
                   content={event.title}
                   style={{ color: "white" }}
                 />
-                <p>{event.date && format(parseISO(event.date), 'EEEE do LLLL')}</p>
+                {/* 18.6 one more error appears after fixing the code below
+                  the next error can be found on the EventDetailedInfo page
+                  head to EventDetailedInfo.jsx
+                   18.7 Now the data in firebase is an object and we are trying 
+                   to map over an object. map only works on arrays. So we will
+                   create a helper function to convery the object into an array
+                   Head to common/util/helper.js
+                */}
+                <p>{event.date && format(event.date.toDate(), 'EEEE do LLLL')}</p>
                 <p>
                   Hosted by <strong>{event.hostedBy}</strong>
                 </p>

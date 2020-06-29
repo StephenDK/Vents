@@ -75,6 +75,7 @@ class EventForm extends Component {
 // 18.4 we are now setting up this method for submitting the event to firebase.
 // once we have connected the form to submit to firebase and it works
 // lets head over to eventDetailed.jsx to display the event data
+// 18.5 To fix the date error head over to EventDetailed.jsx
 onFormSubmit = async (values) => {
   //console.log(values);
   values.venueLatLng = this.state.venueLatLng;
