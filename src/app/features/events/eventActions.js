@@ -1,6 +1,6 @@
 import {
   //CREATE_EVENT,
-  UPDATE_EVENT,
+  // UPDATE_EVENT,
   DELETE_EVENT,
   FETCH_EVENTS,
 } from "./eventConstants";
@@ -45,15 +45,14 @@ export const createEvent = (event) => {
   };
 };
 // action creator for updating event
+// 18.12 the updateEvent below has been updated to use firestore
+// only problem is when we update the database the LatLng is an empty array
+// To fix this head back to eventForm.js
 export const updateEvent = (event) => {
-  return async (dispatch) => {
+  return async (dispatch, getState, {getFirestore}) => {
+    const firestore = getFirestore();
     try {
-      dispatch({
-        type: UPDATE_EVENT,
-        payload: {
-          event,
-        },
-      });
+      await firestore.update(`events/${event.id}`, event);
       toastr.success("Success!", "Event has been updated");
     } catch (error) {
       toastr.error("Oops", "Something went wrong");

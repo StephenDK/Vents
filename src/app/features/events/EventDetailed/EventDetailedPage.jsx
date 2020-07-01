@@ -55,6 +55,8 @@ class EventDetailedPage extends Component {
         // 18.9 we are now going to setup our helper function so that attendees
         // does not throw an error for being a firebase object after we 
         // use our helper function and turn it into an array
+        // next we want to setup our app to update events
+        // 18.10 head over to EventForm.js
         const attendees = event && event.attendees && objectToArray(event.attendees);
         return (
             <Grid>

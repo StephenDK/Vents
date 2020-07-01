@@ -4,7 +4,7 @@ import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { createEvent, updateEvent } from "../eventActions";
 // import cuid from "cuid";
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { reduxForm, Field } from "redux-form";
 import TextInput from "../../../common/form/TextInput";
 import TextArea from "../../../common/form/TextArea";
@@ -17,7 +17,8 @@ import {
   hasLengthGreaterThan,
 } from "revalidate";
 import PlaceInput from "../../../common/form/PlaceInput";
-
+import { withFirestore } from "react-redux-firebase";
+import { toastr } from "react-redux-toastr";
 
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see
@@ -27,15 +28,14 @@ const mapStateToProps = (state, ownProps) => {
 
   let event = {};
 
-  if (eventId && state.events.length > 0) {
-    event = state.events.filter((event) => event.id === eventId)[0];
-  }
+  if (state.firestore.ordered.events && state.firestore.ordered.events.length > 0) {
+    event = state.firestore.ordered.events.filter(event => event.id === eventId)[0] || {}
+}
 
   return {
-    initialValues: event,
+    initialValues: event
   };
 };
-
 
 const mapDispatchToProps = {
   createEvent,
@@ -50,7 +50,6 @@ const category = [
   { key: "music", text: "Music", value: "music" },
   { key: "travel", text: "Travel", value: "travel" },
 ];
-
 
 const validate = combineValidators({
   title: isRequired({ message: "The event title is required" }),
@@ -69,55 +68,78 @@ const validate = combineValidators({
 class EventForm extends Component {
   state = {
     cityLatLng: {},
-    venueLatLng: {}
-  }
+    venueLatLng: {},
+  };
 
-// 18.4 we are now setting up this method for submitting the event to firebase.
-// once we have connected the form to submit to firebase and it works
-// lets head over to eventDetailed.jsx to display the event data
-// 18.5 To fix the date error head over to EventDetailed.jsx
-onFormSubmit = async (values) => {
-  //console.log(values);
-  values.venueLatLng = this.state.venueLatLng;
-  try {
-    if (this.props.initialValues.id) {
-      this.props.updateEvent(values);
-      this.props.history.push(`/events/${this.props.initialValues.id}`);
+  // 18.11 with the function below when the component loads
+  // this function will be called getting the firestore data
+  // with the matching param id
+  // also please add reinitialize to the reduxForm wrapper component at the bottom
+  // so that our data persists
+  // 18.12 now head over to eventActions.js to update the updateEvent method 
+  async componentDidMount() {
+    const { firestore, match, history } = this.props;
+    let event = await firestore.get(`events/${match.params.id}`);
+    // console.log(match);
+    console.log(event);
+    if (!event.exists) {
+      history.push("/events");
+      toastr.error("Sorry", "Event not found");
+      // 18.13 the code below sets the lat and Lng of our state from 
+      // the event in the database. In return this sets the state lat lng
+      // so when we update the event the lat lng remains the same
     } else {
-      let createdEvent = await this.props.createEvent(values);
-      this.props.history.push(`/events/${createdEvent.id}`);
+      this.setState({
+        venueLatLng: event.data().venueLatLng
+      })
     }
   }
-  catch (error) {
-    console.log(error);
-  }
-};
+
+  // 18.4 we are now setting up this method for submitting the event to firebase.
+  // once we have connected the form to submit to firebase and it works
+  // lets head over to eventDetailed.jsx to display the event data
+  // 18.5 To fix the date error head over to EventDetailed.jsx
+  onFormSubmit = async (values) => {
+    //console.log(values);
+    values.venueLatLng = this.state.venueLatLng;
+    try {
+      if (this.props.initialValues.id) {
+        this.props.updateEvent(values);
+        this.props.history.push(`/events/${this.props.initialValues.id}`);
+      } else {
+        let createdEvent = await this.props.createEvent(values);
+        this.props.history.push(`/events/${createdEvent.id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   handleCitySelect = (selectedCity) => {
     geocodeByAddress(selectedCity)
-      .then(results => getLatLng(results[0]))
-      .then(latlng => {
+      .then((results) => getLatLng(results[0]))
+      .then((latlng) => {
         this.setState({
-          cityLatLng: latlng
-        })
+          cityLatLng: latlng,
+        });
       })
       .then(() => {
-        this.props.change('city', selectedCity)
-      })
-  }
+        this.props.change("city", selectedCity);
+      });
+  };
 
   handleVenueSelect = (selectedVenue) => {
     geocodeByAddress(selectedVenue)
-      .then(results => getLatLng(results[0]))
-      .then(latlng => {
+      .then((results) => getLatLng(results[0]))
+      .then((latlng) => {
         this.setState({
-          venueLatLng: latlng
-        })
+          venueLatLng: latlng,
+        });
       })
       .then(() => {
-        this.props.change('venue', selectedVenue)
-      })
-  }
+        this.props.change("venue", selectedVenue);
+      });
+  };
 
   render() {
     //9.16 to disable the submit button we can use some redux form props
@@ -158,7 +180,7 @@ onFormSubmit = async (values) => {
               <Field
                 name="city"
                 component={PlaceInput}
-                options={{ types: ['(cities)'] }}
+                options={{ types: ["(cities)"] }}
                 onSelect={this.handleCitySelect}
                 placeholder="Event city"
               />
@@ -168,7 +190,7 @@ onFormSubmit = async (values) => {
                 options={{
                   location: new google.maps.LatLng(this.state.cityLatLng),
                   radius: 1000,
-                  types: ['establishment']
+                  types: ["establishment"],
                 }}
                 onSelect={this.handleVenueSelect}
                 placeholder="Event Venue"
@@ -178,7 +200,7 @@ onFormSubmit = async (values) => {
                 component={DateInput}
                 dateFormat="dd LLL yyyy h:mm a"
                 showTimeSelect
-                timeFormat='HH:mm'
+                timeFormat="HH:mm"
                 placeholder="Date"
               />
               <Button
@@ -206,14 +228,12 @@ onFormSubmit = async (values) => {
   }
 }
 
-// 9.2 reduxForm requires some setup like the name of the form
-// Order of operations in this code below matters
-// Our connection function below takes two parameters. The redux from and the form component
-// Check the event form component in dev tools to see what we access to.
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(reduxForm({ form: "eventForm", validate })(EventForm));
-//9.15 above we pass validate helper functions into event form
-
-// 9.16 Date Picker go to DateInput.jsx file
+//18.10 What we want to do is connect this component to firestore
+// with the withFirestore higher order component that needs to be imported
+// import and connect the component
+export default withFirestore(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(reduxForm({ form: "eventForm", validate, enableReinitialize: true })(EventForm))
+);
