@@ -60,6 +60,21 @@ export const updateEvent = (event) => {
   };
 };
 
+// 18.15 this is the method for canceling the event
+// we pass in the event id and a bool if the event is cancelled or not
+// Now head over to EventForm to hook up the button
+export const cancelToggle = (cancelled, eventId) => 
+  async (dispatch, getState, {getFirestore}) => {
+    const firestore = getFirestore();
+    try {
+      await firestore.update(`events/${eventId}`, {
+        cancelled: cancelled
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
 export const deleteEvent = (eventId) => {
   return {

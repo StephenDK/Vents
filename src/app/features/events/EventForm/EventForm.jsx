@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { Segment, Form, Button, Grid, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { createEvent, updateEvent } from "../eventActions";
+import { createEvent, updateEvent, cancelToggle } from "../eventActions";
 // import cuid from "cuid";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { reduxForm, Field } from "redux-form";
@@ -33,13 +33,15 @@ const mapStateToProps = (state, ownProps) => {
 }
 
   return {
-    initialValues: event
+    initialValues: event,
+    event
   };
 };
 
 const mapDispatchToProps = {
   createEvent,
   updateEvent,
+  cancelToggle
 };
 
 const category = [
@@ -88,6 +90,7 @@ class EventForm extends Component {
       // 18.13 the code below sets the lat and Lng of our state from 
       // the event in the database. In return this sets the state lat lng
       // so when we update the event the lat lng remains the same
+      // 18.14 Seyup of the cancel event button. Head to eventActions.js
     } else {
       this.setState({
         venueLatLng: event.data().venueLatLng
@@ -149,6 +152,8 @@ class EventForm extends Component {
       invalid,
       submitting,
       pristine,
+      event,
+      cancelToggle
     } = this.props;
     return (
       <Grid>
@@ -220,6 +225,13 @@ class EventForm extends Component {
               >
                 Cancel
               </Button>
+              <Button 
+                type="button"
+                color={event.cancelled ? 'green': 'red'}
+                floated='right'
+                content={event.cancelled ? 'Reactivate event': 'Cancel event'}
+                onClick={() => cancelToggle(!event.cancelled, event.id)}
+              />
             </Form>
           </Segment>
         </Grid.Column>
