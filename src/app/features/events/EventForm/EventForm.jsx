@@ -80,22 +80,27 @@ class EventForm extends Component {
   // so that our data persists
   // 18.12 now head over to eventActions.js to update the updateEvent method 
   async componentDidMount() {
-    const { firestore, match, history } = this.props;
-    let event = await firestore.get(`events/${match.params.id}`);
+    const { firestore, match} = this.props;
+    // let event = await firestore.get(`events/${match.params.id}`);
     // console.log(match);
-    console.log(event);
-    if (!event.exists) {
-      history.push("/events");
-      toastr.error("Sorry", "Event not found");
-      // 18.13 the code below sets the lat and Lng of our state from 
-      // the event in the database. In return this sets the state lat lng
-      // so when we update the event the lat lng remains the same
-      // 18.14 Seyup of the cancel event button. Head to eventActions.js
-    } else {
-      this.setState({
-        venueLatLng: event.data().venueLatLng
-      })
-    }
+    // console.log(event);
+    // 18.17 we are going to now listen for data change inside firebase instead 
+    // of getting a snapshot of data like below
+    // This entire function has been refactored to listen to firebase changes
+    // this change removes the latlng coordinates again. Check onFormSubmit method for fix
+    await firestore.setListener(`events/${match.params.id}`);
+    // if (!event.exists) {
+    //   history.push("/events");
+    //   toastr.error("Sorry", "Event not found");
+    //   // 18.13 the code below sets the lat and Lng of our state from 
+    //   // the event in the database. In return this sets the state lat lng
+    //   // so when we update the event the lat lng remains the same
+    //   // 18.14 Seyup of the cancel event button. Head to eventActions.js
+    // } else {
+    //   this.setState({
+    //     venueLatLng: event.data().venueLatLng
+    //   })
+    // }
   }
 
   // 18.4 we are now setting up this method for submitting the event to firebase.
@@ -107,6 +112,11 @@ class EventForm extends Component {
     values.venueLatLng = this.state.venueLatLng;
     try {
       if (this.props.initialValues.id) {
+        // 18.18 this is the fix for the missing lat lng in our database when we update the event
+        // head over to eventActions for cancel event toastr confirmation
+        if (Object.keys(values.venueLatLng).length === 0) {
+          values.venueLatLng = this.props.event.venueLatLng
+        }
         this.props.updateEvent(values);
         this.props.history.push(`/events/${this.props.initialValues.id}`);
       } else {
@@ -226,6 +236,9 @@ class EventForm extends Component {
                 Cancel
               </Button>
               <Button 
+              // 18.16 the cancel event button below
+              // problem is we have to refresh the component to see the changes
+              // next section is in componentdidmount method
                 type="button"
                 color={event.cancelled ? 'green': 'red'}
                 floated='right'

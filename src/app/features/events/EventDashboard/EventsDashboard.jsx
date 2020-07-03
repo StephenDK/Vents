@@ -3,7 +3,7 @@ import { Grid } from "semantic-ui-react";
 // CH 8 Step 3: Connect Component to store
 import { connect } from "react-redux";
 // CH 8 Step 4 Import event Actions and Configure
-import { createEvent, updateEvent, deleteEvent } from "../eventActions";
+import { createEvent, updateEvent } from "../eventActions";
 
 import EventList from "../EventList/EventList";
 import LoadingComponent from "../../../layout/loadingComponent";
@@ -22,7 +22,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   createEvent,
   updateEvent,
-  deleteEvent,
 };
 
 class EventsDashboard extends Component {
@@ -39,7 +38,7 @@ class EventsDashboard extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>
-          <EventList events={events} deleteEvent={this.handleDeleteEvent} />
+          <EventList events={events} />
         </Grid.Column>
         <Grid.Column width={6}>
           <EventActivity />
