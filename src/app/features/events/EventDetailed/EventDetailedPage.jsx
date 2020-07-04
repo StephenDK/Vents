@@ -27,7 +27,8 @@ const mapStateToProps = (state, ownProps) => {
     }
     // return event object with matching id as param
     return {
-        event
+        event,
+        auth: state.firebase.auth
     }
 }
                     // Pull event from this.props
@@ -51,17 +52,23 @@ class EventDetailedPage extends Component {
     }
 
     render() {
-        const {event} = this.props;
+        const {event, auth} = this.props;
         // 18.9 we are now going to setup our helper function so that attendees
         // does not throw an error for being a firebase object after we 
         // use our helper function and turn it into an array
         // next we want to setup our app to update events
         // 18.10 head over to EventForm.js
         const attendees = event && event.attendees && objectToArray(event.attendees);
+        // 18.23 we are going to use isHost and isGoing variables to set conditional statements
+        // After getting the data we need head over to eventDetailedHeader.jsx component
+        const isHost = event.hostUid === auth.uid
+        const isGoing = attendees && attendees.some(a => a.id === auth.uid)
+        console.log(event);
+        // the some method checks an object for a specific property abd returns true or false
         return (
             <Grid>
                 <Grid.Column width={10}>
-                    <EventDetailedHeader event={event} />
+                    <EventDetailedHeader event={event} isGoing={isGoing} isHost={isHost}/>
                     <EventDetailedInfo event={event} />
                     <EventDetailedChat />
                 </Grid.Column>
@@ -75,3 +82,5 @@ class EventDetailedPage extends Component {
 
 //connect component to store that filterd the event
 export default withFirestore(connect(mapStateToProps)(EventDetailedPage));
+
+// QpIEJKYHm3feTBp1xoErmBAnabv1

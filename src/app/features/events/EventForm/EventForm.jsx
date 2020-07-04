@@ -109,6 +109,8 @@ class EventForm extends Component {
   async componentWillUnmount() {
     const { firestore, match} = this.props;
     await firestore.unsetListener(`events/${match.params.id}`);
+    // Now we are going to setup the buttons using conditionals
+    // 18.22 head over to eventDetailedPage.jsx
   } 
 
 

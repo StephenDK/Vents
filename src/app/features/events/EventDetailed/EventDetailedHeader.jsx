@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Segment, Image, Item, Button, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 
 // Styles
 const eventImageStyle = {
@@ -17,7 +17,7 @@ const eventImageTextStyle = {
   color: "white",
 };
 
-const EventDetailedHeader = ({ event }) => {
+const EventDetailedHeader = ({ event, isHost, isGoing }) => {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -54,17 +54,23 @@ const EventDetailedHeader = ({ event }) => {
         </Segment>
       </Segment>
 
-      <Segment attached="bottom">
-        <Button>Cancel My Place</Button>
-        <Button color="teal">JOIN THIS EVENT</Button>
-
-        <Button
-          as={Link}
-          to={`/manage/${event.id}`}
-          color="orange"
-        >
-          Manage Event
-        </Button>
+      <Segment attached="bottom" clearing>
+        {!isHost &&
+          <Fragment>
+            {isGoing ? (<Button>Cancel My Place</Button>) : (<Button color="teal">JOIN THIS EVENT</Button>)}
+          </Fragment>}
+        {/* 18.24 we are going to now add some conditionals around our buttons
+                after destructing the properties into the component
+              */}
+        {isHost && (
+          <Button
+            as={Link}
+            to={`/manage/${event.id}`}
+            color="orange"
+            floated='right'
+          >
+            Manage Event
+        </Button>)}
       </Segment>
     </Segment.Group>
   );
