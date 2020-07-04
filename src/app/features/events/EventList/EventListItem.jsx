@@ -16,7 +16,9 @@ class EventListItem extends Component {
               <Item.Content>
                 <Item.Header>{event.title}</Item.Header>
                 <Item.Description>Hosted by {event.hostedBy}</Item.Description>
-                {/* 18.20 The Label below is to show wether the event has been cancelled or not */}
+                {/* 18.20 The Label below is to show wether the event has been cancelled or not 
+                  to fix the problem with the firestore listeners head over to eventForm
+                */}
                 {event.cancelled && 
                 <Label
                   style={{ top: "-40px" }}

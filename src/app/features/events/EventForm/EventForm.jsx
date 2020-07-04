@@ -102,6 +102,15 @@ class EventForm extends Component {
     //   })
     // }
   }
+  //18.21 The problem we are currently facing is with the firestore listener above.
+  // By connecting this component with withFirestore higher order component firestore does 
+  //everything for us. If we use the firestore.setListener the listener data will persist
+  // even when our component unmounts. We dont want this.
+  async componentWillUnmount() {
+    const { firestore, match} = this.props;
+    await firestore.unsetListener(`events/${match.params.id}`);
+  } 
+
 
   // 18.4 we are now setting up this method for submitting the event to firebase.
   // once we have connected the form to submit to firebase and it works
