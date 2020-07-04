@@ -10,6 +10,8 @@ import { toastr } from 'react-redux-toastr';
 
 import { objectToArray } from '../../../common/util/helpers';
 
+import { goingToEvent } from '../../user/userActions';
+
 // Since this component is wraped in router we can access the 
 //method from router and pass it into mapStateToProps as ownProps
 const mapStateToProps = (state, ownProps) => {
@@ -31,6 +33,14 @@ const mapStateToProps = (state, ownProps) => {
         auth: state.firebase.auth
     }
 }
+
+const mapDispatchToProps = {
+    goingToEvent
+}
+
+
+
+
                     // Pull event from this.props
 class EventDetailedPage extends Component {
 
@@ -41,18 +51,29 @@ class EventDetailedPage extends Component {
     // each snapshot of data from firebase comes with exists: true || false
     // make a check for if data exists
     async componentDidMount() {
-        const {firestore, match, history} = this.props;
-        let event = await firestore.get(`events/${match.params.id}`);
+        const {firestore, match} = this.props;
+        let event = await firestore.setListener(`events/${match.params.id}`);
         // console.log(match);
         // console.log(event);
-        if (!event.exists) {
-            history.push('/events');
-            toastr.error('Sorry', 'Event not found');
-        }
+        // if (!event.exists) {
+        //     history.push('/events');
+        //     toastr.error('Sorry', 'Event not found');
+        // }
+    }
+
+    async componentWillUnmount() {
+        const {firestore, match} = this.props;
+        let event = await firestore.unsetListener(`events/${match.params.id}`);
+        // console.log(match);
+        // 18.27 we want the button to update when the user joins the event.
+        // to do this functionality we have to change the componentDidMount method.
+        // inside we set a listener on firestore to listen to the data
+        // and also an unsetlistener when the component unmounts 
+        // now head over to the eventDetailedHeader.jsx
     }
 
     render() {
-        const {event, auth} = this.props;
+        const {event, auth, goingToEvent} = this.props;
         // 18.9 we are now going to setup our helper function so that attendees
         // does not throw an error for being a firebase object after we 
         // use our helper function and turn it into an array
@@ -68,7 +89,7 @@ class EventDetailedPage extends Component {
         return (
             <Grid>
                 <Grid.Column width={10}>
-                    <EventDetailedHeader event={event} isGoing={isGoing} isHost={isHost}/>
+                    <EventDetailedHeader event={event} isGoing={isGoing} isHost={isHost} goingToEvent={goingToEvent}/>
                     <EventDetailedInfo event={event} />
                     <EventDetailedChat />
                 </Grid.Column>
@@ -81,6 +102,5 @@ class EventDetailedPage extends Component {
 }
 
 //connect component to store that filterd the event
-export default withFirestore(connect(mapStateToProps)(EventDetailedPage));
+export default withFirestore(connect(mapStateToProps, mapDispatchToProps)(EventDetailedPage));
 
-// QpIEJKYHm3feTBp1xoErmBAnabv1

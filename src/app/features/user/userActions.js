@@ -3,8 +3,7 @@ import { asyncActionStart, asyncActionFinished, asyncActionError } from "../asyn
 import cuid from 'cuid';
 
 
-// 16.10 this file will contain the action for a user to update 
-// their profile
+
 
 export const updateProfile = (user) =>
     async (dispatch, getState, { getFirebase }) => {
@@ -22,10 +21,7 @@ export const updateProfile = (user) =>
         }
     }
 
-// 16.11 head to settings dashboard to import this action
-// then pass the action to the basicPage component
 
-// 17.15 this is the method to upload the cropped phot picked by the user
 export const uploadProfileImage = (file, fileName) =>
     async (dispatch, getState, { getFirebase, getFirestore }) => {
         // 17.22 We are going to append a unique id to the filename of the photo
@@ -69,11 +65,8 @@ export const uploadProfileImage = (file, fileName) =>
             dispatch(asyncActionError());
         }
     }
-// 17.16 now that the photo submit method is setup, import the method 
-// into our component and attach it to a button. Head to PhotosPage.jsx
 
 
-// 17.23 This will be the action to delete a photo
 export const deletePhoto = (photo) => 
     async (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase();
@@ -109,5 +102,39 @@ async (dispatch, getState, { getFirebase }) => {
         throw new Error('Problem setting main photo');
     }
 }
-// now import the method inside the photosPage.jsx and then pass it down 
-// into the UserPhotos.jsx component
+
+
+
+// 18.26 This method below will be for joining events and becoming
+// attendees for events
+export const goingToEvent = (event) =>
+    async (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const user = firebase.auth().currentUser;
+        const profile = getState().firebase.profile;
+        const attendee = {
+            going: true,
+            joinDate: firestore.FieldValue.serverTimestamp(),
+            photoURL: profile.photoURL || '/assets/user.png',
+            displayName: profile.displayName,
+            host: false
+        };
+        try {
+            await firestore.update(`events/${event.id}`, {
+                [`attendees.${user.uid}`]: attendee
+            })
+            await firestore.set(`event_attendee/${event.id}_${user.uid}`, {
+                eventId: event.id,
+                userUid: user.uid,
+                eventDate: event.date,
+                host: false
+            })
+            toastr.success('Success', 'You have signed up for the event!');
+        } catch (error) {
+            console.log(error);
+            toastr.error('Oops', 'Problem signing up for the event');
+        }
+    }
+    // Now we have to add this new method into our eventDetailed page
+    // head there now eventDetailedPage.js

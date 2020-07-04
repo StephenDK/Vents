@@ -17,7 +17,7 @@ const eventImageTextStyle = {
   color: "white",
 };
 
-const EventDetailedHeader = ({ event, isHost, isGoing }) => {
+const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent }) => {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -57,10 +57,15 @@ const EventDetailedHeader = ({ event, isHost, isGoing }) => {
       <Segment attached="bottom" clearing>
         {!isHost &&
           <Fragment>
-            {isGoing ? (<Button>Cancel My Place</Button>) : (<Button color="teal">JOIN THIS EVENT</Button>)}
+            {isGoing ? (<Button>Cancel My Place</Button>
+          ) : (
+            <Button onClick={() => goingToEvent(event)} color="teal">JOIN THIS EVENT</Button>
+          )}
           </Fragment>}
         {/* 18.24 we are going to now add some conditionals around our buttons
                 after destructing the properties into the component
+            // 18.25 we are now going to setup the join event method ncorporating 
+            // attendees into the app. Head to userActions.js
               */}
         {isHost && (
           <Button
