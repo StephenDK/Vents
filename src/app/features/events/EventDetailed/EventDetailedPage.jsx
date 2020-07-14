@@ -6,11 +6,11 @@ import EventDetailedInfo from './EventDetailedInfo'
 import EventDetailedChat from './EventDetailedChat'
 import EventDetailedSidebar from './EventDetailedSidebar'
 import { withFirestore } from 'react-redux-firebase';
-import { toastr } from 'react-redux-toastr';
+
 
 import { objectToArray } from '../../../common/util/helpers';
 
-import { goingToEvent } from '../../user/userActions';
+import { goingToEvent, cancelGoingToEvent } from '../../user/userActions';
 
 // Since this component is wraped in router we can access the 
 //method from router and pass it into mapStateToProps as ownProps
@@ -35,7 +35,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = {
-    goingToEvent
+    goingToEvent,
+    cancelGoingToEvent
 }
 
 
@@ -73,7 +74,7 @@ class EventDetailedPage extends Component {
     }
 
     render() {
-        const {event, auth, goingToEvent} = this.props;
+        const {event, auth, goingToEvent, cancelGoingToEvent} = this.props;
         // 18.9 we are now going to setup our helper function so that attendees
         // does not throw an error for being a firebase object after we 
         // use our helper function and turn it into an array
@@ -89,7 +90,15 @@ class EventDetailedPage extends Component {
         return (
             <Grid>
                 <Grid.Column width={10}>
-                    <EventDetailedHeader event={event} isGoing={isGoing} isHost={isHost} goingToEvent={goingToEvent}/>
+                    <EventDetailedHeader 
+                        event={event} 
+                        isGoing={isGoing} 
+                        isHost={isHost} 
+                        goingToEvent={goingToEvent}
+                        cancelGoingToEvent={cancelGoingToEvent}
+                        // 18.30 After importing the method and destructoring the props that have the method
+                        // head to eventDetailedHeader
+                    />
                     <EventDetailedInfo event={event} />
                     <EventDetailedChat />
                 </Grid.Column>

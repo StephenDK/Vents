@@ -138,3 +138,22 @@ export const goingToEvent = (event) =>
     }
     // Now we have to add this new method into our eventDetailed page
     // head there now eventDetailedPage.js
+
+    // 18.29 We are going to setup the cancel going to event method
+    export const cancelGoingToEvent = (event) =>
+        async (dispatch, getState, {getFirestore, getFirebase}) => {
+            const firestore = getFirestore();
+            const firebase = getFirebase();
+            const user = firebase.auth().currentUser;
+            try {
+                await firestore.update(`events/${event.id}`, {
+                    [`attendees.${user.uid}`]: firestore.FieldValue.delete()
+                })
+                await firestore.delete(`event_attendee/${event.id}_${user.uid}`);
+                toastr.success('Success', 'You have removed yourself from the event.')
+            } catch (error) {
+                console.log(error);
+                toastr.error('Opps', 'Something went wrong');
+            }
+        } 
+    // Now head over to eventDetailed page to hook up this method

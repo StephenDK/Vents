@@ -17,7 +17,7 @@ const eventImageTextStyle = {
   color: "white",
 };
 
-const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent }) => {
+const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingToEvent }) => {
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -53,11 +53,13 @@ const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent }) => {
           </Item.Group>
         </Segment>
       </Segment>
-
+                {/* 18.28 now head over to userActions to setup the cancel event
+                  method.
+                */}
       <Segment attached="bottom" clearing>
         {!isHost &&
           <Fragment>
-            {isGoing ? (<Button>Cancel My Place</Button>
+            {isGoing ? (<Button onClick={() => cancelGoingToEvent(event)}>Cancel My Place</Button>
           ) : (
             <Button onClick={() => goingToEvent(event)} color="teal">JOIN THIS EVENT</Button>
           )}
