@@ -74,7 +74,7 @@ class UserDetailedPage extends Component {
       unfollowUser
     } = this.props
     const isCurrentUser = auth.uid === match.params.id
-    const loading = requesting[`users/${match.params.id}`]
+    const loading = Object.values(requesting).some(a => a === true);
     const isFollowing = !isEmpty(following)
 
     if (loading) return <LoadingComponent inverted={true} />
