@@ -18,7 +18,7 @@ import {
 } from "revalidate";
 import PlaceInput from "../../../common/form/PlaceInput";
 import { withFirestore } from "react-redux-firebase";
-import { toastr } from "react-redux-toastr";
+
 
 const mapStateToProps = (state, ownProps) => {
   // Uncomment to see

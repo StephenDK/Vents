@@ -3,6 +3,7 @@ import { Segment, Item, Icon, List, Button, Label } from "semantic-ui-react";
 import EventListAttendee from "./EventListAttendee";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import {objectToArray} from '../../../common/util/helpers';
 
 class EventListItem extends Component {
   render() {
@@ -14,8 +15,11 @@ class EventListItem extends Component {
             <Item>
               <Item.Image size="tiny" circular src={event.hostPhotoURL} />
               <Item.Content>
-                <Item.Header>{event.title}</Item.Header>
-                <Item.Description>Hosted by {event.hostedBy}</Item.Description>
+                <Item.Header as={Link} to={`/events/${event.id}`}>{event.title}</Item.Header>
+                <Item.Description>
+                  Hosted by 
+                    <Link as={Link} to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link>
+                </Item.Description>
                 {/* 18.20 The Label below is to show wether the event has been cancelled or not 
                   to fix the problem with the firestore listeners head over to eventForm
                 */}
@@ -41,8 +45,8 @@ class EventListItem extends Component {
         <Segment secondary>
           <List horizontal>
             {event.attendees &&
-              Object.values(event.attendees).map((attendee, index) => (
-                <EventListAttendee key={index} attendee={attendee} />
+              objectToArray(event.attendees).map((attendee) => (
+                <EventListAttendee key={attendee.id} attendee={attendee} />
               ))}
           </List>
         </Segment>

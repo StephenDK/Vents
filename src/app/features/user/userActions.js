@@ -157,3 +157,16 @@ export const goingToEvent = (event) =>
             }
         } 
     // Now head over to eventDetailed page to hook up this method
+
+    export const getUserEvents = () => {
+
+    }
+
+
+    export const followUser = () => {
+
+    }
+
+    export const unfollowUser = () => {
+        
+    }

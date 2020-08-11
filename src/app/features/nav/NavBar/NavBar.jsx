@@ -74,6 +74,7 @@ class NavBar extends Component {
               signOut={this.handleSignOut}
             // 15.18 finish displaying name in isgned in menu
               profile={profile}
+              auth={auth}
             />
           ) : (
             <SignedOutMenu
