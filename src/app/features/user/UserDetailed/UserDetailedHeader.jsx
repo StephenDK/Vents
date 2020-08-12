@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Header, Item, Segment, Image } from 'semantic-ui-react'
+import { Grid, Header, Item, Segment } from 'semantic-ui-react'
 import {differenceInYears} from 'date-fns'
 import LazyLoad from 'react-lazyload';
 
