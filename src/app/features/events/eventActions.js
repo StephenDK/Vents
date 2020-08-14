@@ -80,18 +80,31 @@ export const cancelToggle = (cancelled, eventId) => async (
 
 // Section 40.1 Get the events for the dashboard
 // import the firebase.config file
-export const getEventsForDashboard = () => 
+export const getEventsForDashboard = (lastEvent) => 
   async (dispatch, getState) => {
     let today = new Date();
     const firestore = firebase.firestore();
     // this is how we define querys in firebase
     // events collection, date is the field in the collection and >=, today is the constraint 
-    const eventsQuery = firestore.collection('events').where('date', '>=', today);
+    // const eventsQuery = firestore.collection('events').where('date', '>=', today);
+    const eventsRef = firestore.collection('events');
     // console.log(eventsQuery);
     try {
       dispatch(asyncActionStart());
-      let querySnap = await eventsQuery.get();
+      let startAfter = lastEvent && await firestore.collection('events').doc(lastEvent.id).get();
+      // let querySnap = await eventsQuery.get();
       // console.log(querySnap);
+      let query;
+
+      lastEvent ? query = eventsRef.where('date', '>=', today).orderBy('date').startAfter(startAfter).limit(2)
+      : query = eventsRef.where('date', '>=', today).orderBy('date').limit(2);
+
+      let querySnap = await query.get();
+
+      if (querySnap.docs.length === 0) {
+        dispatch(asyncActionFinished());
+      }
+
       let events = [];
       for (let i = 0; i < querySnap.docs.length; i++) {
         let evt = {...querySnap.docs[i].data(), id: querySnap.docs[i].id}
@@ -100,6 +113,7 @@ export const getEventsForDashboard = () =>
       // console.log(events);
       dispatch({ type: FETCH_EVENTS, payload: {events} });
       dispatch(asyncActionFinished());
+      return querySnap;
     } catch (error) {
       console.log(error);
       dispatch(asyncActionError());
