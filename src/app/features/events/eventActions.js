@@ -1,5 +1,8 @@
 import { toastr } from "react-redux-toastr";
 import { createNewEvent } from "../../common/util/helpers";
+import firebase from '../../../app/config/firebase';
+import { FETCH_EVENTS } from "./eventConstants";
+import { asyncActionStart, asyncActionFinished, asyncActionError } from "../async/asyncActions";
 
 // 18.1 we are now going to setup the createEvent action to use firestore
 export const createEvent = (event) => {
@@ -75,5 +78,31 @@ export const cancelToggle = (cancelled, eventId) => async (
   }
 };
 
-
-
+// Section 40.1 Get the events for the dashboard
+// import the firebase.config file
+export const getEventsForDashboard = () => 
+  async (dispatch, getState) => {
+    let today = new Date();
+    const firestore = firebase.firestore();
+    // this is how we define querys in firebase
+    // events collection, date is the field in the collection and >=, today is the constraint 
+    const eventsQuery = firestore.collection('events').where('date', '>=', today);
+    // console.log(eventsQuery);
+    try {
+      dispatch(asyncActionStart());
+      let querySnap = await eventsQuery.get();
+      // console.log(querySnap);
+      let events = [];
+      for (let i = 0; i < querySnap.docs.length; i++) {
+        let evt = {...querySnap.docs[i].data(), id: querySnap.docs[i].id}
+        events.push(evt);
+      }
+      // console.log(events);
+      dispatch({ type: FETCH_EVENTS, payload: {events} });
+      dispatch(asyncActionFinished());
+    } catch (error) {
+      console.log(error);
+      dispatch(asyncActionError());
+    }
+  }
+// head over to the events dashboard
