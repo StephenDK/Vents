@@ -96,13 +96,21 @@ export const getEventsForDashboard = (lastEvent) =>
       // console.log(querySnap);
       let query;
 
-      lastEvent ? query = eventsRef.where('date', '>=', today).orderBy('date').startAfter(startAfter).limit(2)
-      : query = eventsRef.where('date', '>=', today).orderBy('date').limit(2);
+      lastEvent 
+        ? query = eventsRef
+          .where('date', '>=', today)
+          .orderBy('date')
+          .startAfter(startAfter).limit(2)
+        : (query = eventsRef
+          .where('date', '>=', today)
+          .orderBy('date')
+          .limit(2));
 
       let querySnap = await query.get();
 
       if (querySnap.docs.length === 0) {
         dispatch(asyncActionFinished());
+        return querySnap;
       }
 
       let events = [];

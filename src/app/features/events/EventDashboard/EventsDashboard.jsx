@@ -9,6 +9,7 @@ import EventList from "../EventList/EventList";
 import LoadingComponent from "../../../layout/loadingComponent";
 import EventActivity from "../EventActivity/EventActivity";
 import { firestoreConnect } from "react-redux-firebase";
+import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
 
 // 12.29 first get the loading state from redux and pass to
 // component as props
@@ -25,8 +26,32 @@ const mapDispatchToProps = {
 };
 
 class EventsDashboard extends Component {
-  componentDidMount() {
-    this.props.getEventsForDashboard();
+    state = {
+      moreEvents: false
+    }
+
+  async componentDidMount() {
+    let next = await this.props.getEventsForDashboard();
+    console.log(next);
+
+    if (next && next.docs && next.docs.length > 1) {
+      this.setState({
+        moreEvents: true
+      })
+    }
+  }
+
+  getNextEvents = async () => {
+    const { events } = this.props;
+    let lastEvent = events && events[events.length - 1];
+    console.log(lastEvent);
+    let next = await this.props.getEventsForDashboard(lastEvent);
+    console.log(next);
+    if (next && next.docs && next.docs.length <= 1) {
+      this.setState({
+        moreEvents: false
+      })
+    }
   }
 
   render() {
@@ -39,6 +64,13 @@ class EventsDashboard extends Component {
       <Grid>
         <Grid.Column width={10}>
           <EventList events={events} />
+          <Button 
+            onClick={this.getNextEvents} 
+            disabled={!this.state.moreEvents} 
+            content='More' 
+            color='green' 
+            floated='right'
+          />
         </Grid.Column>
         <Grid.Column width={6}>
           <EventActivity />
