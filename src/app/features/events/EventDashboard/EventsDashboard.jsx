@@ -27,7 +27,9 @@ const mapDispatchToProps = {
 
 class EventsDashboard extends Component {
     state = {
-      moreEvents: false
+      moreEvents: false,
+      loadingInitial: true,
+      loadedEvents: []
     }
 
   async componentDidMount() {
@@ -36,7 +38,16 @@ class EventsDashboard extends Component {
 
     if (next && next.docs && next.docs.length > 1) {
       this.setState({
-        moreEvents: true
+        moreEvents: true,
+        loadingInitial: false
+      })
+    }
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.events !== prevProps.events) {
+      this.setState({
+        loadedEvents: [...this.state.loadedEvents, ...this.props.events]
       })
     }
   }
@@ -55,16 +66,17 @@ class EventsDashboard extends Component {
   }
 
   render() {
-    const { events, loading } = this.props;
+    const { loading } = this.props;
     // 12.30 if the loading state is true in our store
     // show loading component else load dashboard
     // head to authActions to add redux thunk to loging In
-    if (loading) return <LoadingComponent />;
+    if (this.state.loadingInitial) return <LoadingComponent />;
     return (
       <Grid>
         <Grid.Column width={10}>
-          <EventList events={events} />
+          <EventList events={this.state.loadedEvents} />
           <Button 
+            loading={loading}
             onClick={this.getNextEvents} 
             disabled={!this.state.moreEvents} 
             content='More' 
