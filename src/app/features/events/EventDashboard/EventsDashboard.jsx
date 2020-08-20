@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Loader } from "semantic-ui-react";
 // CH 8 Step 3: Connect Component to store
 import { connect } from "react-redux";
 // CH 8 Step 4 Import event Actions and Configure
@@ -9,7 +9,8 @@ import EventList from "../EventList/EventList";
 import LoadingComponent from "../../../layout/loadingComponent";
 import EventActivity from "../EventActivity/EventActivity";
 import { firestoreConnect } from "react-redux-firebase";
-import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
+
+
 
 // 12.29 first get the loading state from redux and pass to
 // component as props
@@ -67,6 +68,7 @@ class EventsDashboard extends Component {
 
   render() {
     const { loading } = this.props;
+    const { moreEvents, loadedEvents } = this.state
     // 12.30 if the loading state is true in our store
     // show loading component else load dashboard
     // head to authActions to add redux thunk to loging In
@@ -74,18 +76,18 @@ class EventsDashboard extends Component {
     return (
       <Grid>
         <Grid.Column width={10}>
-          <EventList events={this.state.loadedEvents} />
-          <Button 
+          <EventList 
+            events={loadedEvents} 
             loading={loading}
-            onClick={this.getNextEvents} 
-            disabled={!this.state.moreEvents} 
-            content='More' 
-            color='green' 
-            floated='right'
+            moreEvents={moreEvents}
+            getNextEvents={this.getNextEvents}
           />
         </Grid.Column>
         <Grid.Column width={6}>
           <EventActivity />
+        </Grid.Column>
+        <Grid.Column width={10}>
+          <Loader active={loading}/>
         </Grid.Column>
       </Grid>
     );

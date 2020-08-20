@@ -29,8 +29,8 @@ const UserDetailedEvents = ({ events, eventsLoading, changeTab }) => {
                 <Card.Content>
                   <Card.Header textAlign='center'>{event.title}</Card.Header>
                   <Card.Meta textAlign='center'>
-                    <div>{format(event.date, 'DD MMM YYYY')}</div>
-                    <div>{format(event.date, 'h:mm A')}</div>
+                    {/* <div>{format(event.date, 'DD MMM YYYY')}</div>
+                    <div>{format(event.date, 'h:mm A')}</div> */}
                   </Card.Meta>
                 </Card.Content>
               </Card>
