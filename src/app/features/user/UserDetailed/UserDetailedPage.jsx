@@ -38,27 +38,17 @@ const mapState = (state, ownProps) => {
   }
 }
 
-const actions = {
+const mapDispatchToProps = {
   getUserEvents,
   followUser,
   unfollowUser
 }
 
 class UserDetailedPage extends Component {
-  // async componentDidMount() {
-  //   let user = await this.props.firestore.get(
-  //     `users/${this.props.match.params.id}`
-  //   )
-  //   if (!user.exists) {
-  //     toastr.error('Not found', 'This is not the user you are looking for')
-  //     this.props.history.push('/error')
-  //   }
-  //   await this.props.getUserEvents(this.props.userUid)
-  // }
-
-  // changeTab = (e, data) => {
-  //   this.props.getUserEvents(this.props.userUid, data.activeIndex)
-  // }
+  async componentDidMount() {
+    let events = await this.props.getUserEvents(this.props.userUid, 2);
+    console.log(events);
+  }
 
   render() {
     const {
@@ -104,7 +94,7 @@ class UserDetailedPage extends Component {
 export default compose(
   connect(
     mapState,
-    actions
+    mapDispatchToProps
   ),
   firestoreConnect((auth, userUid, match) =>
     userDetailedQuery(auth, userUid, match)

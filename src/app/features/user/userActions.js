@@ -192,7 +192,7 @@ export const goingToEvent = (event) =>
                     .orderBy('eventDate', 'desc');
             }
             try {
-                let querySnap = await querySnap.get();
+                let querySnap = await query.get();
                 console.log(querySnap);
                 dispatch(asyncActionFinished());
             } catch (error) {
